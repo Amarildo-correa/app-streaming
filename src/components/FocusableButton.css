@@ -1,0 +1,27 @@
+.focusable-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  font-family: var(--font-family-base);
+  cursor: pointer;
+  transition: var(--transition-focus);
+}
+
+.focusable-button--primary {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+.focusable-button--secondary {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+}
+
+.focusable-button.is-focused {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-focus);
+}
