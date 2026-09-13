@@ -1,3 +1,5 @@
+import { classNames } from '../utils/classNames';
+
 interface IconProps {
   name: string;
   className?: string;
@@ -5,7 +7,7 @@ interface IconProps {
 
 export function Icon({ name, className }: IconProps) {
   return (
-    <span className={`material-symbols-rounded icon ${className ?? ''}`.trim()} aria-hidden="true">
+    <span className={classNames('material-symbols-rounded', 'icon', className)} aria-hidden="true">
       {name}
     </span>
   );

@@ -52,5 +52,4 @@
   z-index: var(--layer-header);
   box-shadow: 0 0 0 0.2rem var(--color-bg), 0 0 0 0.5rem var(--color-text);
   transform: scale(1.12);
-
 }

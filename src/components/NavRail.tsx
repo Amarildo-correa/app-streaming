@@ -1,5 +1,6 @@
 import { FocusContext, useFocusable } from "@noriginmedia/norigin-spatial-navigation-react";
 import { Icon } from "./Icon";
+import { classNames } from "../utils/classNames";
 import "./NavRail.css";
 
 const items = [
@@ -9,11 +10,23 @@ const items = [
     { key: "minha-lista", label: "Minha Lista", iconName: "bookmark" },
 ];
 
-function NavRailItem({ label, itemKey, iconName }: { label: string; itemKey: string; iconName: string }) {
+interface NavRailItemProps {
+    itemKey: string;
+    label: string;
+    iconName: string;
+}
+
+function NavRailItem({ itemKey, label, iconName }: NavRailItemProps) {
     const { ref, focused, focusSelf } = useFocusable({ focusKey: `nav-${itemKey}` });
 
     return (
-        <button ref={ref} type="button" className={`nav-rail__item ${focused ? "is-focused" : ""}`.trim()} onFocus={() => focusSelf()} onClick={() => focusSelf()}>
+        <button
+            ref={ref}
+            type="button"
+            className={classNames("nav-rail__item", focused && "is-focused")}
+            onFocus={() => focusSelf()}
+            onClick={() => focusSelf()}
+        >
             <Icon name={iconName} />
             <span className="nav-rail__label">{label}</span>
         </button>

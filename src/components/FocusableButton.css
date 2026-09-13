@@ -4,7 +4,9 @@
   gap: var(--space-2);
   padding: var(--space-3) var(--space-5);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
   font-size: var(--font-size-md);
   font-family: var(--font-family-base);
   font-weight: var(--font-weight-bold);
@@ -15,19 +17,7 @@
 
 .focusable-button .icon {
   font-weight: var(--font-weight-bold);
-  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
-}
-
-.focusable-button--primary {
-  background: var(--color-text);
-  color: var(--color-bg);
-  border-radius: var(--radius-pill);
-}
-
-.focusable-button--secondary {
-  background: var(--color-surface-raised);
-  color: var(--color-text);
-  border-radius: var(--radius-pill);
+  font-variation-settings: var(--icon-settings-filled);
 }
 
 .focusable-button:focus-visible,
@@ -36,16 +26,5 @@
   background-color: var(--color-text);
   color: var(--color-bg);
   font-weight: var(--font-weight-extrabold);
-  border-radius: var(--radius-pill);
   box-shadow: var(--shadow-focus);
-}
-
-.focusable-button:focus-visible .icon,
-.focusable-button.is-focused .icon {
-  font-weight: var(--font-weight-bold);
-}
-
-.focusable-button:focus-visible span,
-.focusable-button.is-focused span {
-  font-weight: var(--font-weight-extrabold);
 }

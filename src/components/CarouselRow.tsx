@@ -7,14 +7,23 @@ interface CarouselRowProps {
   title: string;
   movies: Movie[];
   focusKey: string;
-  onCardFocus: (movie: Movie) => void;
+  onCardFocus: (movie: Movie, index: number) => void;
+  /**
+   * Sem isto, a lib sempre abre uma fileira nunca visitada pelo primeiro
+   * card ao entrar via seta cima/baixo, ignorando de qual coluna o usuário
+   * veio — por isso os cards "desalinham" ao trocar de fileira. Repassa o
+   * índice da última coluna focada (em qualquer fileira) para manter o
+   * alinhamento horizontal na primeira visita.
+   */
+  preferredChildFocusKey?: string;
 }
 
-export function CarouselRow({ title, movies, focusKey, onCardFocus }: CarouselRowProps) {
+export function CarouselRow({ title, movies, focusKey, onCardFocus, preferredChildFocusKey }: CarouselRowProps) {
   const { ref, focusKey: resolvedFocusKey } = useFocusable({
     focusKey,
     trackChildren: true,
     saveLastFocusedChild: true,
+    preferredChildFocusKey,
   });
 
   return (
@@ -22,8 +31,8 @@ export function CarouselRow({ title, movies, focusKey, onCardFocus }: CarouselRo
       <section ref={ref} className="carousel-row">
         <h2 className="carousel-row__title">{title}</h2>
         <div className="carousel-row__track">
-          {movies.map((movie) => (
-            <MovieCard key={movie.slug} movie={movie} onFocus={onCardFocus} />
+          {movies.map((movie, index) => (
+            <MovieCard key={movie.slug} movie={movie} onFocus={() => onCardFocus(movie, index)} />
           ))}
         </div>
       </section>

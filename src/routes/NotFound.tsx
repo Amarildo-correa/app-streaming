@@ -1,19 +1,12 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FocusContext, useFocusable } from '@noriginmedia/norigin-spatial-navigation-react';
+import { FocusContext } from '@noriginmedia/norigin-spatial-navigation-react';
 import { FocusableButton } from '../components/FocusableButton';
+import { useTerminalRouteFocus } from '../hooks/useTerminalRouteFocus';
 import './NotFound.css';
 
 export function NotFound() {
   const navigate = useNavigate();
-  const { ref, focusKey, focusSelf } = useFocusable({
-    isFocusBoundary: true,
-    focusBoundaryDirections: ['up', 'down', 'right'],
-  });
-
-  useEffect(() => {
-    focusSelf();
-  }, [focusSelf]);
+  const { ref, focusKey } = useTerminalRouteFocus();
 
   return (
     <FocusContext.Provider value={focusKey}>

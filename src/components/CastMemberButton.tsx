@@ -1,6 +1,8 @@
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation-react';
-import type { CastMember } from '../data/movies';
+import { classNames } from '../utils/classNames';
+import { applyPicsumFallback } from '../utils/picsum';
 import { scrollFocusedIntoView } from '../utils/scrollFocusedIntoView';
+import type { CastMember } from '../data/movies';
 
 interface CastMemberButtonProps {
   member: CastMember;
@@ -17,7 +19,7 @@ export function CastMemberButton({ member, movieSlug }: CastMemberButtonProps) {
     <button
       ref={ref}
       type="button"
-      className={`cast-member__button ${focused ? 'is-focused' : ''}`.trim()}
+      className={classNames('cast-member__button', focused && 'is-focused')}
       onFocus={() => focusSelf()}
       onClick={() => focusSelf()}
     >
@@ -27,10 +29,7 @@ export function CastMemberButton({ member, movieSlug }: CastMemberButtonProps) {
         height={100}
         loading="lazy"
         alt={member.name}
-        onError={(e) => {
-          e.currentTarget.onerror = null;
-          e.currentTarget.src = `https://picsum.photos/seed/${movieSlug}-cast-fallback/100/100`;
-        }}
+        onError={(event) => applyPicsumFallback(event, `${movieSlug}-cast-fallback`, 100, 100)}
       />
     </button>
   );

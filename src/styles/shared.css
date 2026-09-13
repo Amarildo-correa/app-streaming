@@ -1,0 +1,55 @@
+/* Estilos compartilhados entre Hero e MovieDetail. */
+
+.display-title {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-display);
+  text-shadow: var(--shadow-text);
+}
+
+.synopsis {
+  margin: 0;
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+}
+
+.backdrop-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* `.backdrop-image` é remontada a cada troca de rota (novo Hero), então a
+   animação dispara sozinha na entrada, sem JS. */
+@keyframes backdrop-zoom-in {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes backdrop-zoom-out {
+  from {
+    transform: scale(1.08);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .backdrop-image {
+    animation: backdrop-zoom-in 0.4s ease-out forwards;
+  }
+
+  .hero--home .backdrop-image {
+    animation-name: backdrop-zoom-out;
+  }
+}

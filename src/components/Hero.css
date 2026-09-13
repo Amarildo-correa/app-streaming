@@ -1,31 +1,48 @@
+/* Estrutura compartilhada por Home e MovieDetail: mesmas colunas e gradientes,
+   para que a troca de rota não desloque o conteúdo. */
 .hero {
-    display: grid;
-    grid-template-columns: 34rem minmax(0, 1fr);
-    position: sticky;
-    top: 0;
-    z-index: var(--layer-hero);
+    position: relative;
+    min-height: var(--hero-height);
     width: calc(100% + var(--safe-area) * 2);
-    height: var(--hero-height);
     margin-inline: calc(var(--safe-area) * -1);
-    margin-bottom: var(--space-6);
     overflow: hidden;
     background: var(--color-bg);
 }
 
-.hero--empty {
+/* Na Home o hero fica fixo no topo enquanto os carrosséis rolam por baixo. */
+.hero--home {
     position: sticky;
     top: 0;
     z-index: var(--layer-hero);
     height: var(--hero-height);
-    width: calc(100% + var(--safe-area) * 2);
-    margin-inline: calc(var(--safe-area) * -1);
+    margin-bottom: var(--space-6);
 }
 
-.hero__backdrop {
-    display: block;
+/* Trilha horizontal: em repouso tem um único painel (100% do hero); durante
+   a troca de foco entre cards (`useHeroCardTransition`), ganha um segundo
+   painel colado ao lado e desliza como os Stories do Instagram — o cartão
+   antigo sai completamente de vista enquanto o novo entra grudado nele, sem
+   sobrepor um no outro. */
+.hero-slide-track {
+    display: flex;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+}
+
+.hero-slide-track.is-transitioning {
+    width: calc(var(--panel-width, 0px) * 2);
+}
+
+.hero-slide-track.is-transitioning .hero-panel {
+    flex: 0 0 var(--panel-width, 100%);
+}
+
+.hero-panel {
+    position: relative;
+    flex: 0 0 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 34rem minmax(0, 1fr);
 }
 
 .hero__content-column,
@@ -38,8 +55,13 @@
     position: relative;
     z-index: 2;
     display: flex;
+    align-items: center;
+    padding: var(--space-7) var(--safe-area);
+}
+
+/* Na Home o hero tem altura fixa e o conteúdo assenta na base. */
+.hero--home .hero__content-column {
     align-items: flex-end;
-    padding: 0 var(--safe-area) var(--space-7);
 }
 
 .hero__backdrop-column {
@@ -56,7 +78,7 @@
     z-index: 1;
     content: '';
     pointer-events: none;
-    background: linear-gradient(90deg, var(--color-bg) 0%, rgba(11, 13, 18, 0.88) 18%, rgba(11, 13, 18, 0.3) 48%, transparent 78%);
+    background: linear-gradient(90deg, var(--color-bg) 0%, rgba(var(--color-bg-rgb), 0.88) 18%, rgba(var(--color-bg-rgb), 0.3) 48%, transparent 78%);
 }
 
 .hero__gradient {
@@ -64,46 +86,39 @@
     inset: 0;
     z-index: 1;
     background:
-        linear-gradient(180deg, transparent 0%, rgba(11, 13, 18, 0.55) 55%, var(--color-bg) 100%),
-        linear-gradient(90deg, var(--color-bg) 0%, rgba(11, 13, 18, 0.7) 28%, transparent 58%);
+        linear-gradient(180deg, transparent 0%, rgba(var(--color-bg-rgb), 0.55) 55%, var(--color-bg) 100%),
+        linear-gradient(90deg, var(--color-bg) 0%, rgba(var(--color-bg-rgb), 0.7) 28%, transparent 58%);
 }
 
 .hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
     max-width: 42rem;
 }
 
-.hero__title {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: var(--letter-spacing-display);
-    margin: 0 0 var(--space-3) 0;
-    text-shadow: var(--shadow-text);
-}
+@media (max-width: 52rem) {
+    .hero-panel {
+        grid-template-columns: 1fr;
+    }
 
-.hero__badges {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    margin-bottom: var(--space-3);
-}
+    .hero--home {
+        height: auto;
+    }
 
-.hero__badge {
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-pill);
-    background: var(--color-surface-raised);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-}
+    .hero__content-column {
+        grid-row: 2;
+    }
 
-.hero__badge--accent {
-    background: var(--color-accent-soft);
-    color: var(--color-accent);
-}
+    .hero__backdrop-column {
+        grid-column: 1;
+        grid-row: 1;
+        width: 100%;
+        min-height: 20rem;
+    }
 
-.hero__synopsis {
-    font-size: var(--font-size-md);
-    line-height: 1.5;
-    margin: 0;
+    .hero__gradient {
+        background: linear-gradient(180deg, transparent 0%, var(--color-bg) 100%);
+    }
 }

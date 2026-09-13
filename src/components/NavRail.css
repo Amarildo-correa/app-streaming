@@ -61,7 +61,7 @@
 .nav-rail__item .icon {
     flex: 0 0 auto;
     font-weight: var(--font-weight-bold);
-    font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
+    font-variation-settings: var(--icon-settings-filled);
 }
 
 .nav-rail__label {
@@ -79,18 +79,12 @@
     outline: none;
     background-color: var(--color-text);
     color: var(--color-bg);
-    font-weight: var(--font-weight-extrabold);
     box-shadow: var(--shadow-focus);
 }
 
 .nav-rail__item.is-focused .icon,
-.nav-rail__item:focus-visible .icon {
-    color: var(--color-bg);
-    font-weight: var(--font-weight-bold);
-}
-
 .nav-rail__item.is-focused .nav-rail__label,
+.nav-rail__item:focus-visible .icon,
 .nav-rail__item:focus-visible .nav-rail__label {
     color: var(--color-bg);
-    font-weight: var(--font-weight-extrabold);
 }

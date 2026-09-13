@@ -1,7 +1,8 @@
 :root {
     color-scheme: dark;
 
-    --color-bg: #0b0d12;
+    --color-bg-rgb: 11, 13, 18;
+    --color-bg: rgb(var(--color-bg-rgb));
     --color-surface: #14171f;
     --color-surface-raised: #1e222c;
     --color-text: #f2f0ea;
@@ -46,6 +47,8 @@
     --shadow-focus: 0 0 0 0.3rem var(--color-text);
     --shadow-text: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.8);
     --gradient-card: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.85) 100%);
+    --icon-settings-outlined: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    --icon-settings-filled: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
     --layer-content: 1;
     --layer-hero: 5;
     --layer-header: 10;
