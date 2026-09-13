@@ -1,0 +1,32 @@
+.focus-fade--active {
+    animation: focus-fade-pulse 240ms;
+}
+
+@keyframes focus-fade-pulse {
+    0% {
+        opacity: 1;
+        filter: blur(0);
+        animation-timing-function: ease-out;
+    }
+
+    32% {
+        opacity: 0.4;
+        filter: blur(0.25rem);
+        animation-timing-function: linear;
+    }
+
+    /* Segura a opacidade/desfoque no ponto mais baixo por um trecho em vez de
+       um pico instantâneo: `useFocusFade` troca o filme exibido em algum
+       momento dentro deste platô, garantindo que a troca sempre aconteça
+       enquanto a animação ainda está encobrindo, nunca depois dela. */
+    46% {
+        opacity: 0.4;
+        filter: blur(0.25rem);
+        animation-timing-function: ease-in;
+    }
+
+    100% {
+        opacity: 1;
+        filter: blur(0);
+    }
+}

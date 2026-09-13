@@ -18,45 +18,11 @@
     margin-bottom: var(--space-6);
 }
 
-/* Envolve o painel do filme em destaque; ao trocar de card na Home
-   (`useHeroFocusFade`), ganha a classe abaixo e faz um pulso suave de
-   opacidade e desfoque em vez de trocar de filme abruptamente. */
+/* Envolve o painel do filme em destaque. `useHeroFocusFade` controla o
+   pulso compartilhado de opacidade e desfoque definido em focusFade.css. */
 .hero-slide-track {
     width: 100%;
     height: 100%;
-}
-
-.hero-slide-track--fading {
-    animation: hero-fade-pulse 240ms;
-}
-
-@keyframes hero-fade-pulse {
-    0% {
-        opacity: 1;
-        filter: blur(0);
-        animation-timing-function: ease-out;
-    }
-
-    32% {
-        opacity: 0.4;
-        filter: blur(0.25rem);
-        animation-timing-function: linear;
-    }
-
-    /* Segura a opacidade/desfoque no ponto mais baixo por um trecho em vez de
-       um pico instantâneo: `useHeroFocusFade` troca o filme exibido em algum
-       momento dentro deste platô, garantindo que a troca sempre aconteça
-       enquanto a animação ainda está encobrindo, nunca depois dela. */
-    46% {
-        opacity: 0.4;
-        filter: blur(0.25rem);
-        animation-timing-function: ease-in;
-    }
-
-    100% {
-        opacity: 1;
-        filter: blur(0);
-    }
 }
 
 .hero-panel {

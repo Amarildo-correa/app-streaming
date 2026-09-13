@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { FocusContext, useFocusable } from "@noriginmedia/norigin-spatial-navigation-react";
 import { init as initNavigation, type NextFocusResolver } from "@noriginmedia/norigin-spatial-navigation-core";
 import { NavRail } from "./components/NavRail";
+import { NavRailFocusContext } from "./contexts/NavRailFocusContext";
 
 initNavigation({ debug: false, visualDebug: false, distanceCalculationMethod: "corners" });
 
@@ -18,6 +20,7 @@ const resolveAppFocus: NextFocusResolver = (direction, currentKey, siblings) => 
 };
 
 export function App() {
+    const [isNavRailFocused, setIsNavRailFocused] = useState(false);
     const { ref, focusKey } = useFocusable({
         focusKey: "app",
         isFocusBoundary: true,
@@ -26,12 +29,14 @@ export function App() {
 
     return (
         <FocusContext.Provider value={focusKey}>
-            <div ref={ref} className="app-shell">
-                <NavRail />
-                <main className="app-content">
-                    <Outlet />
-                </main>
-            </div>
+            <NavRailFocusContext.Provider value={isNavRailFocused}>
+                <div ref={ref} className="app-shell">
+                    <NavRail onFocusChange={setIsNavRailFocused} />
+                    <main className="app-content">
+                        <Outlet />
+                    </main>
+                </div>
+            </NavRailFocusContext.Provider>
         </FocusContext.Provider>
     );
 }

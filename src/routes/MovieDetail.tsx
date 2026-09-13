@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FocusContext, useFocusable } from "@noriginmedia/norigin-spatial-navigation-react";
 import { getMovieBySlug, type CastMember } from "../data/movies";
@@ -7,6 +7,8 @@ import { CastMemberButton } from "../components/CastMemberButton";
 import { Hero } from "../components/Hero";
 import { useTerminalRouteFocus } from "../hooks/useTerminalRouteFocus";
 import { recordHeroContentPosition } from "../hooks/useHeroContentFlip";
+import { useFocusFade } from "../hooks/useFocusFade";
+import { NavRailFocusContext } from "../contexts/NavRailFocusContext";
 import { NotFound } from "./NotFound";
 import "./MovieDetail.css";
 
@@ -15,6 +17,8 @@ export function MovieDetail() {
     const navigate = useNavigate();
     const movie = getMovieBySlug(decodeURIComponent(slug));
     const { ref, focusKey } = useTerminalRouteFocus();
+    const isNavRailFocused = useContext(NavRailFocusContext);
+    const castMaskRef = useFocusFade<HTMLElement>(isNavRailFocused);
 
     const goBack = useCallback(() => {
         recordHeroContentPosition();
@@ -47,7 +51,7 @@ export function MovieDetail() {
                         <FocusableButton label="Voltar" iconName="arrow_back" onPress={goBack} focusKey="detail-back" />
                     </div>
                 </Hero>
-                <section className="movie-detail__cast">
+                <section ref={castMaskRef} className="movie-detail__cast">
                     <h2>Elenco</h2>
                     <MovieDetailCast cast={movie.cast} movieSlug={movie.slug} />
                 </section>

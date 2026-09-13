@@ -1,8 +1,9 @@
-import type { ReactNode } from "react";
+import { useContext, type ReactNode } from "react";
 import { HeroCardPanel } from "./HeroCardPanel";
 import { classNames } from "../utils/classNames";
 import { useHeroContentFlip } from "../hooks/useHeroContentFlip";
 import { useHeroFocusFade } from "../hooks/useHeroFocusFade";
+import { NavRailFocusContext } from "../contexts/NavRailFocusContext";
 import type { Movie } from "../data/movies";
 import "./Hero.css";
 
@@ -19,7 +20,8 @@ interface HeroProps {
 export function Hero({ movie, variant, children }: HeroProps) {
     const className = classNames("hero", variant === "home" && "hero--home");
     const contentRef = useHeroContentFlip<HTMLDivElement>();
-    const { trackRef, displayedMovie } = useHeroFocusFade(movie);
+    const isNavRailFocused = useContext(NavRailFocusContext);
+    const { trackRef, displayedMovie } = useHeroFocusFade(movie, isNavRailFocused);
 
     if (!displayedMovie) return <div className={className} />;
 

@@ -33,11 +33,19 @@ function NavRailItem({ itemKey, label, iconName }: NavRailItemProps) {
     );
 }
 
-export function NavRail() {
+interface NavRailProps {
+    onFocusChange: (focused: boolean) => void;
+}
+
+export function NavRail({ onFocusChange }: NavRailProps) {
     const { ref, focusKey } = useFocusable({
         focusKey: "nav-rail",
         isFocusBoundary: true,
         focusBoundaryDirections: ["up", "down", "left"],
+        // Os callbacks do container cobrem todos os botões, sem alternar o
+        // estado quando o foco apenas muda de um item do rail para outro.
+        onFocus: () => onFocusChange(true),
+        onBlur: () => onFocusChange(false),
     });
 
     return (
