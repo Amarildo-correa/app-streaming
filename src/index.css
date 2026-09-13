@@ -37,3 +37,11 @@ img {
   min-height: 100vh;
   padding: var(--safe-area);
 }
+
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}

@@ -250,7 +250,7 @@ git commit -m "fix: substituir calculo manual de scroll por scrollIntoView para 
 
 **Interfaces:** nenhuma — só CSS.
 
-- [ ] **Passo 1:** Adicionar ao final de `src/index.css`:
+- [x] **Passo 1:** Adicionar ao final de `src/index.css`:
 
 ```css
 html {
@@ -262,8 +262,8 @@ html::-webkit-scrollbar {
 }
 ```
 
-- [ ] **Passo 2 (verificação manual):** com o percurso do Passo 5 da Tarefa 2 em execução, tirar screenshot em pelo menos 2 estados (linha 1 focada, linha 2 focada) e confirmar visualmente que nenhuma barra de rolagem do browser aparece em nenhum dos dois, mesmo com a página tendo mais conteúdo do que a viewport.
-- [ ] **Passo 3 (commit):**
+- [x] **Passo 2 (verificação manual):** com o percurso do Passo 5 da Tarefa 2 em execução, tirar screenshot em pelo menos 2 estados (linha 1 focada, linha 2 focada) e confirmar visualmente que nenhuma barra de rolagem do browser aparece em nenhum dos dois, mesmo com a página tendo mais conteúdo do que a viewport.
+- [x] **Passo 3 (commit):**
 
 ```bash
 git add src/index.css
