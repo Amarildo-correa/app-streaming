@@ -1,9 +1,8 @@
-import { useRef, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { HeroCardPanel } from "./HeroCardPanel";
 import { classNames } from "../utils/classNames";
 import { useHeroContentFlip } from "../hooks/useHeroContentFlip";
-import { useHeroCardTransition } from "../hooks/useHeroCardTransition";
-import { useHeroSlideTrack } from "../hooks/useHeroSlideTrack";
+import { useHeroFocusFade } from "../hooks/useHeroFocusFade";
 import type { Movie } from "../data/movies";
 import "./Hero.css";
 
@@ -20,35 +19,18 @@ interface HeroProps {
 export function Hero({ movie, variant, children }: HeroProps) {
     const className = classNames("hero", variant === "home" && "hero--home");
     const contentRef = useHeroContentFlip<HTMLDivElement>();
-    const heroRef = useRef<HTMLDivElement>(null);
-    const trackRef = useRef<HTMLDivElement>(null);
-    const transition = useHeroCardTransition(movie);
-    useHeroSlideTrack(trackRef, transition);
+    const { trackRef, displayedMovie } = useHeroFocusFade(movie);
 
-    if (!movie) return <div ref={heroRef} className={className} />;
+    if (!displayedMovie) return <div className={className} />;
 
     const isDetail = variant === "detail";
 
     return (
-        <div ref={heroRef} className={className}>
+        <div className={className}>
             <div ref={trackRef} className="hero-slide-track">
-                {transition ? (
-                    transition.direction === "right" ? (
-                        <>
-                            <HeroCardPanel movie={transition.from} isDetail={false} />
-                            <HeroCardPanel movie={movie} isDetail={false} contentRef={contentRef} />
-                        </>
-                    ) : (
-                        <>
-                            <HeroCardPanel movie={movie} isDetail={false} contentRef={contentRef} />
-                            <HeroCardPanel movie={transition.from} isDetail={false} />
-                        </>
-                    )
-                ) : (
-                    <HeroCardPanel movie={movie} isDetail={isDetail} contentRef={contentRef}>
-                        {children}
-                    </HeroCardPanel>
-                )}
+                <HeroCardPanel movie={displayedMovie} isDetail={isDetail} contentRef={contentRef}>
+                    {children}
+                </HeroCardPanel>
             </div>
         </div>
     );

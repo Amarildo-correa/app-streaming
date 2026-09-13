@@ -12,9 +12,9 @@ interface HeroCardPanelProps {
 
 /**
  * Um "cartão" completo do Hero (coluna de conteúdo + imagem de fundo). Na
- * Home, a troca de foco entre cards renderiza dois painéis lado a lado
- * (`hero-slide-track`) para o efeito de empurrar como os Stories do
- * Instagram — por isso o painel em si não conhece a rota, só o filme.
+ * Home, a troca de foco entre cards anima `.hero-slide-track` (o pai deste
+ * painel) com um pulso de opacidade (`useHeroFocusFade`) — por isso o painel
+ * em si não conhece a rota, só o filme.
  */
 export function HeroCardPanel({ movie, isDetail, contentRef, children }: HeroCardPanelProps) {
     return (

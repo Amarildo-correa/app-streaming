@@ -4,7 +4,6 @@ import { classNames } from '../utils/classNames';
 import { applyPicsumFallback } from '../utils/picsum';
 import { scrollFocusedIntoView } from '../utils/scrollFocusedIntoView';
 import { recordHeroContentPosition } from '../hooks/useHeroContentFlip';
-import { recordArrowDirection } from '../utils/lastArrowDirection';
 import type { Movie } from '../data/movies';
 import './MovieCard.css';
 
@@ -22,12 +21,6 @@ export function MovieCard({ movie, onFocus }: MovieCardProps) {
   const { ref, focused } = useFocusable({
     focusKey: `card-${movie.slug}`,
     onEnterPress: openMovie,
-    // A direção fica registrada aqui para o slide do Hero (useHeroCardTransition);
-    // o próprio card não desliza mais, só faz zoom (ver MovieCard.css).
-    onArrowPress: (direction) => {
-      recordArrowDirection(direction);
-      return true;
-    },
     onFocus: () => {
       onFocus(movie);
       scrollFocusedIntoView(ref.current);
