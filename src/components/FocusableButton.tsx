@@ -1,5 +1,6 @@
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation-react';
 import { Icon } from './Icon';
+import { scrollFocusedIntoView } from '../utils/scrollFocusedIntoView';
 import './FocusableButton.css';
 
 interface FocusableButtonProps {
@@ -11,7 +12,11 @@ interface FocusableButtonProps {
 }
 
 export function FocusableButton({ label, iconName, onPress, focusKey, variant = 'primary' }: FocusableButtonProps) {
-  const { ref, focused } = useFocusable({ focusKey, onEnterPress: onPress });
+  const { ref, focused } = useFocusable({
+    focusKey,
+    onEnterPress: onPress,
+    onFocus: () => scrollFocusedIntoView(ref.current, 'center'),
+  });
 
   return (
     <button

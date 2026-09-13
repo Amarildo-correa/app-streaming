@@ -1,6 +1,7 @@
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation-react';
 import { useNavigate } from 'react-router-dom';
 import type { Movie } from '../data/movies';
+import { scrollFocusedIntoView } from '../utils/scrollFocusedIntoView';
 import './MovieCard.css';
 
 interface MovieCardProps {
@@ -13,7 +14,10 @@ export function MovieCard({ movie, onFocus }: MovieCardProps) {
   const { ref, focused } = useFocusable({
     focusKey: `card-${movie.slug}`,
     onEnterPress: () => navigate(`/movie/${encodeURIComponent(movie.slug)}`),
-    onFocus: () => onFocus(movie),
+    onFocus: () => {
+      onFocus(movie);
+      scrollFocusedIntoView(ref.current);
+    },
   });
 
   return (
@@ -23,14 +27,14 @@ export function MovieCard({ movie, onFocus }: MovieCardProps) {
       onClick={() => navigate(`/movie/${encodeURIComponent(movie.slug)}`)}
     >
       <img
-        src={movie.posterUrl}
-        width={200}
-        height={300}
+        src={movie.backdropUrl}
+        width={1280}
+        height={720}
         loading="lazy"
         alt={movie.title}
         onError={(e) => {
           e.currentTarget.onerror = null;
-          e.currentTarget.src = `https://picsum.photos/seed/${movie.slug}-fallback/200/300`;
+          e.currentTarget.src = `https://picsum.photos/seed/${movie.slug}-fallback/1280/720`;
         }}
       />
       <span className="movie-card__title">{movie.title}</span>

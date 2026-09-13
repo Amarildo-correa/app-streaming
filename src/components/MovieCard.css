@@ -1,16 +1,19 @@
 .movie-card {
   position: relative;
-  width: 12.5rem;
+  width: var(--movie-card-width);
   flex: 0 0 auto;
   cursor: pointer;
   transition: var(--transition-focus);
   border-radius: var(--radius-md);
+  /* Reserva espaço para o crescimento e o anel ao acompanhar o foco. */
+  scroll-margin-block: var(--space-7);
 }
 
 .movie-card img {
   width: 100%;
   height: auto;
-  aspect-ratio: 2 / 3;
+  aspect-ratio: var(--movie-card-aspect-ratio);
+  object-fit: cover;
   border-radius: var(--radius-md);
 }
 

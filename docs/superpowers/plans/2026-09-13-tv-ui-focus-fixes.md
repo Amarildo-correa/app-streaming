@@ -18,6 +18,7 @@
 
 ## Restrições Globais
 
+- Atualização solicitada durante a execução: usar cards horizontais 16:9 nos carrosséis, com `backdropUrl` e fallback horizontal. Dimensões centralizadas em tokens; a Tarefa 2 inclui `scroll-margin-block` para reservar espaço para o crescimento do foco durante `scrollIntoView`.
 - Não introduzir scroll nativo do mouse/trackpad como forma de navegação — o scroll continua sendo consequência do foco, nunca a causa.
 - Manter todas as restrições do plano anterior (`docs/superpowers/plans/2026-09-12-tv-streaming-app.md`): `rem`/`em` (nunca `px`), custom properties CSS, sem SVG inline, sem `innerHTML`, `focusKey` estável.
 - Nenhuma regressão nos fluxos já validados: Home → Detalhe → Voltar com foco restaurado, deep link em `/movie/:slug`, estado NotFound.
@@ -89,13 +90,15 @@ git commit -m "fix: ampliar padding da trilha para eliminar overflow vertical e 
 - Modify: `src/components/MovieCard.tsx`
 - Modify: `src/components/CarouselRow.tsx`
 - Modify: `src/components/FocusableButton.tsx`
+- Modify: `src/components/MovieCard.css` — formato horizontal e margem de scroll para o foco.
+- Modify: `src/styles/tokens.css` — largura e proporção do card.
 
 **Interfaces:**
 
 - Produces: `scrollFocusedIntoView(el: Element | null, block?: ScrollLogicalPosition): void` — chamada por qualquer componente focável que precise garantir que, ao ganhar foco, o próprio elemento fique visível na viewport (rolando tanto o scroll vertical da página quanto o scroll horizontal do carrossel, num único mecanismo nativo do browser).
 - Consumes (em `MovieCard`/`FocusableButton`): `ref.current` retornado por `useFocusable`.
 
-- [ ] **Passo 1:** Criar `src/utils/scrollFocusedIntoView.ts`:
+- [x] **Passo 1:** Criar `src/utils/scrollFocusedIntoView.ts`:
 
 ```ts
 export function scrollFocusedIntoView(el: Element | null, block: ScrollLogicalPosition = "nearest"): void {
@@ -104,7 +107,7 @@ export function scrollFocusedIntoView(el: Element | null, block: ScrollLogicalPo
 }
 ```
 
-- [ ] **Passo 2:** Atualizar `src/components/MovieCard.tsx` para chamar o helper no próprio `onFocus` do card (substituindo a necessidade do cálculo manual que hoje vive em `CarouselRow`):
+- [x] **Passo 2:** Atualizar `src/components/MovieCard.tsx` para chamar o helper no próprio `onFocus` do card (substituindo a necessidade do cálculo manual que hoje vive em `CarouselRow`):
 
 ```tsx
 import { useFocusable } from "@noriginmedia/norigin-spatial-navigation-react";
@@ -132,14 +135,14 @@ export function MovieCard({ movie, onFocus }: MovieCardProps) {
     return (
         <div ref={ref} className={`movie-card ${focused ? "is-focused" : ""}`.trim()} onClick={() => navigate(`/movie/${encodeURIComponent(movie.slug)}`)}>
             <img
-                src={movie.posterUrl}
-                width={200}
-                height={300}
+                src={movie.backdropUrl}
+                width={1280}
+                height={720}
                 loading="lazy"
                 alt={movie.title}
                 onError={(e) => {
                     e.currentTarget.onerror = null;
-                    e.currentTarget.src = `https://picsum.photos/seed/${movie.slug}-fallback/200/300`;
+                    e.currentTarget.src = `https://picsum.photos/seed/${movie.slug}-fallback/1280/720`;
                 }}
             />
             <span className="movie-card__title">{movie.title}</span>
@@ -148,7 +151,7 @@ export function MovieCard({ movie, onFocus }: MovieCardProps) {
 }
 ```
 
-- [ ] **Passo 3:** Simplificar `src/components/CarouselRow.tsx`, removendo o cálculo manual de `scrollLeft` (a rolagem horizontal agora é responsabilidade do `scrollIntoView` chamado dentro do próprio `MovieCard`):
+- [x] **Passo 3:** Simplificar `src/components/CarouselRow.tsx`, removendo o cálculo manual de `scrollLeft` (a rolagem horizontal agora é responsabilidade do `scrollIntoView` chamado dentro do próprio `MovieCard`):
 
 ```tsx
 import { FocusContext, useFocusable } from "@noriginmedia/norigin-spatial-navigation-react";
@@ -185,7 +188,7 @@ export function CarouselRow({ title, movies, focusKey, onCardFocus }: CarouselRo
 }
 ```
 
-- [ ] **Passo 4:** Atualizar `src/components/FocusableButton.tsx` para também rolar a página quando um botão (ex.: "Assistir", "Voltar", elenco futuro) receber foco fora da área visível:
+- [x] **Passo 4:** Atualizar `src/components/FocusableButton.tsx` para também rolar a página quando um botão (ex.: "Assistir", "Voltar", elenco futuro) receber foco fora da área visível:
 
 ```tsx
 import { useFocusable } from "@noriginmedia/norigin-spatial-navigation-react";
@@ -217,7 +220,7 @@ export function FocusableButton({ label, iconName, onPress, focusKey, variant = 
 }
 ```
 
-- [ ] **Passo 5 (verificação manual via chrome-devtools CLI):** com o dev server rodando, simular o percurso completo de um usuário de controle remoto e confirmar que o foco nunca sai da viewport:
+- [x] **Passo 5 (verificação manual via chrome-devtools CLI):** com o dev server rodando, simular o percurso completo de um usuário de controle remoto e confirmar que o foco nunca sai da viewport:
 
 ```bash
 chrome-devtools new_page http://localhost:5173/
@@ -229,10 +232,10 @@ chrome-devtools evaluate_script --pageId <id> "() => { const el = document.query
 
 Esperado: `withinViewport: true`. Repetir avançando `ArrowRight` até o último card (12º) de cada linha e confirmar o mesmo (`inline: 'center'` deve manter o card sempre visível horizontalmente também).
 
-- [ ] **Passo 6 (commit):**
+- [x] **Passo 6 (commit):**
 
 ```bash
-git add src/utils/scrollFocusedIntoView.ts src/components/MovieCard.tsx src/components/CarouselRow.tsx src/components/FocusableButton.tsx
+git add src/utils/scrollFocusedIntoView.ts src/components/MovieCard.tsx src/components/CarouselRow.tsx src/components/FocusableButton.tsx src/components/MovieCard.css src/styles/tokens.css docs/superpowers/plans/2026-09-13-tv-ui-focus-fixes.md
 git commit -m "fix: substituir calculo manual de scroll por scrollIntoView para acompanhar o foco em ambos os eixos"
 ```
 
