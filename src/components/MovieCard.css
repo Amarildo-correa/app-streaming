@@ -1,0 +1,32 @@
+.movie-card {
+  width: 12.5rem;
+  flex: 0 0 auto;
+  cursor: pointer;
+  transition: var(--transition-focus);
+  border-radius: var(--radius-md);
+}
+
+.movie-card img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+.movie-card__title {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-card.is-focused {
+  transform: scale(1.12);
+  box-shadow: var(--shadow-focus);
+}
+
+.movie-card.is-focused .movie-card__title {
+  color: var(--color-text);
+}
