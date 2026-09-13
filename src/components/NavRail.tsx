@@ -15,7 +15,7 @@ function NavRailItem({ label, itemKey, iconName }: { label: string; itemKey: str
     return (
         <button ref={ref} type="button" className={`nav-rail__item ${focused ? "is-focused" : ""}`.trim()} onFocus={() => focusSelf()} onClick={() => focusSelf()}>
             <Icon name={iconName} />
-            <span>{label}</span>
+            <span className="nav-rail__label">{label}</span>
         </button>
     );
 }

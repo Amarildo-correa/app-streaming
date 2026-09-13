@@ -56,13 +56,13 @@
     flex: 0 0 auto;
 }
 
-.nav-rail__item span {
+.nav-rail__label {
     opacity: 0;
     transition: opacity 0.2s ease;
 }
 
-.nav-rail:focus-within .nav-rail__item span,
-.nav-rail:has(.nav-rail__item.is-focused) .nav-rail__item span {
+.nav-rail:focus-within .nav-rail__label,
+.nav-rail:has(.nav-rail__item.is-focused) .nav-rail__label {
     opacity: 1;
 }
 
