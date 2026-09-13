@@ -1,4 +1,5 @@
 import { FocusContext, useFocusable } from '@noriginmedia/norigin-spatial-navigation-react';
+import './FocusableButton.css';
 import './Header.css';
 
 const items = [
@@ -15,7 +16,7 @@ function HeaderButton({ label, itemKey }: { label: string; itemKey: string }) {
     <button
       ref={ref}
       type="button"
-      className={`header__button ${focused ? 'is-focused' : ''}`.trim()}
+      className={`focusable-button focusable-button--secondary header__button ${focused ? 'is-focused' : ''}`.trim()}
       onFocus={() => focusSelf()}
       onClick={() => focusSelf()}
     >

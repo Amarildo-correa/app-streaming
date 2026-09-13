@@ -11,7 +11,7 @@ interface FocusableButtonProps {
   variant?: 'primary' | 'secondary';
 }
 
-export function FocusableButton({ label, iconName, onPress, focusKey, variant = 'primary' }: FocusableButtonProps) {
+export function FocusableButton({ label, iconName, onPress, focusKey, variant = 'secondary' }: FocusableButtonProps) {
   const { ref, focused } = useFocusable({
     focusKey,
     onEnterPress: onPress,
