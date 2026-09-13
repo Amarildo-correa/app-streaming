@@ -35,6 +35,10 @@
     padding: var(--space-7) var(--safe-area);
 }
 
+.movie-detail__hero-content {
+    padding-bottom: var(--space-4);
+}
+
 .movie-detail__backdrop-column {
     position: relative;
     grid-column: 2;
@@ -68,11 +72,12 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-2);
+    column-gap: var(--space-2);
+    row-gap: var(--space-1);
 }
 
 .movie-detail__badge {
-    padding: var(--space-1) var(--space-3);
+    padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-pill);
     background: var(--color-surface-raised);
     color: var(--color-text-muted);
