@@ -7,8 +7,15 @@
   border-radius: var(--radius-md);
   font-size: var(--font-size-md);
   font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
   transition: var(--transition-focus);
+  box-shadow: var(--shadow-focus-rest);
+}
+
+.focusable-button .icon {
+  font-weight: var(--font-weight-bold);
+  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
 }
 
 .focusable-button--primary {
@@ -28,7 +35,17 @@
   outline: none;
   background-color: var(--color-text);
   color: var(--color-bg);
+  font-weight: var(--font-weight-extrabold);
   border-radius: var(--radius-pill);
-  transform: scale(1.08);
   box-shadow: var(--shadow-focus);
+}
+
+.focusable-button:focus-visible .icon,
+.focusable-button.is-focused .icon {
+  font-weight: var(--font-weight-bold);
+}
+
+.focusable-button:focus-visible span,
+.focusable-button.is-focused span {
+  font-weight: var(--font-weight-extrabold);
 }

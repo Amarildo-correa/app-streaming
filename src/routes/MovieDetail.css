@@ -4,7 +4,7 @@
 
 .movie-detail__overview {
     display: grid;
-    grid-template-columns: minmax(18rem, 40%) minmax(0, 1fr);
+    grid-template-columns: 32rem minmax(0, 1fr);
     min-height: 26rem;
     width: calc(100% + var(--safe-area) * 2);
     margin-inline: calc(var(--safe-area) * -1);
@@ -103,6 +103,10 @@
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
     margin: 0;
+}
+
+.movie-detail__actions .focusable-button {
+    white-space: nowrap;
 }
 
 .movie-detail__actions {

@@ -6,6 +6,7 @@
   flex: 0 0 auto;
   cursor: pointer;
   transition: var(--transition-focus);
+  box-shadow: var(--shadow-focus-rest);
   border-radius: var(--radius-md);
   /* Reserva espaço para o crescimento e o anel ao acompanhar o foco. */
   scroll-margin-bottom: var(--space-7);

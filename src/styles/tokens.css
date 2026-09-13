@@ -28,6 +28,7 @@
     --font-size-2xl: 2.5rem;
     --font-size-3xl: 4rem;
     --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
     --font-weight-medium: 500;
     --letter-spacing-display: 0.01em;
 
@@ -41,7 +42,8 @@
     --radius-md: 0.5rem;
     --radius-round: 50%;
     --radius-pill: 999rem;
-    --shadow-focus: 0 0 0 0.3rem var(--color-focus), 0 0.5rem 1.5rem rgba(232, 163, 61, 0.35);
+    --shadow-focus-rest: 0 0 0 0 transparent;
+    --shadow-focus: 0 0 0 0.3rem var(--color-text);
     --shadow-text: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.8);
     --gradient-card: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.85) 100%);
     --layer-content: 1;
