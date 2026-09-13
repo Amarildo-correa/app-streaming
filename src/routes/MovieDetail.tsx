@@ -11,7 +11,11 @@ export function MovieDetail() {
   const { slug = '' } = useParams();
   const navigate = useNavigate();
   const movie = getMovieBySlug(decodeURIComponent(slug));
-  const { ref, focusKey, focusSelf } = useFocusable({ isFocusBoundary: true });
+  const { ref, focusKey, focusSelf } = useFocusable({
+    isFocusBoundary: true,
+    // A seta para cima permite alcançar o menu compartilhado.
+    focusBoundaryDirections: ['left', 'right', 'down'],
+  });
 
   useEffect(() => {
     focusSelf();

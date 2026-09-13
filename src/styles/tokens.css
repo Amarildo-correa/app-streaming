@@ -26,17 +26,21 @@
   --font-size-2xl: 2.5rem;
   --font-size-3xl: 3.5rem;
   --font-weight-bold: 700;
+  --font-weight-medium: 500;
   --letter-spacing-display: -0.02em;
 
   --safe-area: 4vw;
+  --header-height: 6rem;
   --movie-card-width: 20rem;
   --movie-card-aspect-ratio: 16 / 9;
   --cast-photo-size: 6.25rem;
   --radius-md: 0.5rem;
   --radius-round: 50%;
+  --radius-pill: 999rem;
   --shadow-focus: 0 0 0 0.2rem var(--color-focus), 0 0.5rem 1.5rem rgba(0, 0, 0, 0.6);
   --shadow-text: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.8);
   --gradient-card: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.85) 100%);
   --layer-content: 1;
+  --layer-header: 10;
   --transition-focus: transform 0.18s ease, box-shadow 0.18s ease;
 }

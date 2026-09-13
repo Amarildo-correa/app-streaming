@@ -6,7 +6,10 @@ import './NotFound.css';
 
 export function NotFound() {
   const navigate = useNavigate();
-  const { ref, focusKey, focusSelf } = useFocusable({ isFocusBoundary: true });
+  const { ref, focusKey, focusSelf } = useFocusable({
+    isFocusBoundary: true,
+    focusBoundaryDirections: ['left', 'right', 'down'],
+  });
 
   useEffect(() => {
     focusSelf();

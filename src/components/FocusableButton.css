@@ -14,11 +14,13 @@
 .focusable-button--primary {
   background: var(--color-text);
   color: var(--color-bg);
+  border-radius: var(--radius-pill);
 }
 
 .focusable-button--secondary {
   background: var(--color-surface-raised);
   color: var(--color-text);
+  border-radius: var(--radius-pill);
 }
 
 .focusable-button.is-focused {
