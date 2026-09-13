@@ -19,6 +19,7 @@
 ## Restrições Globais
 
 - Atualização solicitada durante a execução: usar cards horizontais 16:9 nos carrosséis, com `backdropUrl` e fallback horizontal. Dimensões centralizadas em tokens; a Tarefa 2 inclui `scroll-margin-block` para reservar espaço para o crescimento do foco durante `scrollIntoView`.
+- Ajuste posterior solicitado: aproximar os cards do título da linha. Com os cards horizontais, reduzir apenas o padding superior da trilha para `var(--space-5)`, mantendo as laterais e a base e revalidando o anel completo.
 - Não introduzir scroll nativo do mouse/trackpad como forma de navegação — o scroll continua sendo consequência do foco, nunca a causa.
 - Manter todas as restrições do plano anterior (`docs/superpowers/plans/2026-09-12-tv-streaming-app.md`): `rem`/`em` (nunca `px`), custom properties CSS, sem SVG inline, sem `innerHTML`, `focusKey` estável.
 - Nenhuma regressão nos fluxos já validados: Home → Detalhe → Voltar com foco restaurado, deep link em `/movie/:slug`, estado NotFound.
@@ -50,15 +51,15 @@ src/
 
 **Interfaces:** nenhuma mudança de interface — só CSS.
 
-- [x] **Passo 1:** Aumentar o padding vertical de `.carousel-row__track` para `var(--space-7)`, acomodando o card com `scale(1.12)` e seu anel de foco sem overflow real. Manter `overflow-x: hidden`: declarar `overflow-y: visible` não impediria seu valor computado `auto`. A ausência de scrollbar deve resultar de `scrollHeight === clientHeight`, sem apenas escondê-la.
+- [x] **Passo 1:** Reservar padding vertical suficiente em `.carousel-row__track`, acomodando o card com `scale(1.12)` e seu anel de foco sem overflow real. Inicialmente foi usado `var(--space-7)` nos dois lados; após a mudança para cards horizontais e o pedido de aproximar os títulos, o topo usa `var(--space-5)` e a base mantém `var(--space-7)`. Manter `overflow-x: hidden`: declarar `overflow-y: visible` não impediria seu valor computado `auto`. A ausência de scrollbar deve resultar de `scrollHeight === clientHeight`, sem apenas escondê-la.
 
 ```css
 .carousel-row__track {
     display: flex;
     gap: var(--space-5);
     overflow-x: hidden;
-    /* A folga vertical acomoda o scale(1.12) e o anel sem overflow real. */
-    padding: var(--space-7) var(--space-5);
+    /* Cards horizontais precisam de menos folga acima para o scale e o anel. */
+    padding: var(--space-5) var(--space-5) var(--space-7);
     margin: 0 calc(var(--space-5) * -1);
 }
 ```
