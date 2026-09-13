@@ -1,5 +1,5 @@
 .carousel-row {
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-7);
 }
 
 .carousel-row__title {
@@ -11,5 +11,6 @@
   display: flex;
   gap: var(--space-5);
   overflow-x: hidden;
-  padding: var(--space-2) 0;
+  padding: var(--space-3) var(--space-5);
+  margin: 0 calc(var(--space-5) * -1);
 }

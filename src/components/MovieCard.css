@@ -1,4 +1,5 @@
 .movie-card {
+  position: relative;
   width: 12.5rem;
   flex: 0 0 auto;
   cursor: pointer;
@@ -9,6 +10,7 @@
 .movie-card img {
   width: 100%;
   height: auto;
+  aspect-ratio: 2 / 3;
   border-radius: var(--radius-md);
 }
 
@@ -23,6 +25,8 @@
 }
 
 .movie-card.is-focused {
+  position: relative;
+  z-index: 1;
   transform: scale(1.12);
   box-shadow: var(--shadow-focus);
 }
