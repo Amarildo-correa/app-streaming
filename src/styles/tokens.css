@@ -32,6 +32,7 @@
     --letter-spacing-display: 0.01em;
 
     --safe-area: 4vw;
+    --hero-height: 34rem;
     --rail-width-collapsed: 5.5rem;
     --rail-width-expanded: 14rem;
     --movie-card-width: 20rem;
@@ -44,6 +45,7 @@
     --shadow-text: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.8);
     --gradient-card: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.85) 100%);
     --layer-content: 1;
+    --layer-hero: 5;
     --layer-header: 10;
     --transition-focus: transform 0.18s ease, box-shadow 0.18s ease;
 }

@@ -1,7 +1,9 @@
 .hero {
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: var(--layer-hero);
     width: calc(100% + var(--safe-area) * 2);
-    height: 34rem;
+    height: var(--hero-height);
     margin-inline: calc(var(--safe-area) * -1);
     margin-bottom: var(--space-6);
     overflow: hidden;
@@ -9,7 +11,10 @@
 }
 
 .hero--empty {
-    height: 34rem;
+    position: sticky;
+    top: 0;
+    z-index: var(--layer-hero);
+    height: var(--hero-height);
     width: calc(100% + var(--safe-area) * 2);
     margin-inline: calc(var(--safe-area) * -1);
 }

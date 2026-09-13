@@ -8,7 +8,10 @@
   transition: var(--transition-focus);
   border-radius: var(--radius-md);
   /* Reserva espaço para o crescimento e o anel ao acompanhar o foco. */
-  scroll-margin-block: var(--space-7);
+  scroll-margin-bottom: var(--space-7);
+  /* O hero fica sticky sobre o topo da página: reserva espaço extra para o
+     título da linha não ficar escondido atrás dele ao rolar via D-pad. */
+  scroll-margin-top: calc(var(--hero-height) + var(--space-8));
 }
 
 .movie-card::after {
