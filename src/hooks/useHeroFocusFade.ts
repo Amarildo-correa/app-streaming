@@ -2,14 +2,15 @@ import { useLayoutEffect, useRef, useState } from "react";
 import type { Movie } from "../data/movies";
 
 const FADE_CLASS = "hero-slide-track--fading";
-const FADE_ANIMATION_MS = 360;
+const FADE_ANIMATION_MS = 240;
 /**
- * Enquanto o usuário segura uma seta, o foco troca de card a cada poucos
- * milissegundos; sem esse atraso, cada troca reiniciaria o pulso e ele nunca
- * chegaria a completar um ciclo — a tela ficaria "correndo" sem descanso. O
- * pulso só dispara quando o foco fica parado por este intervalo.
+ * Um toque isolado mantém o atraso original antes de iniciar o pulso.
+ * Nas trocas rápidas, o mesmo pulso fica pausado no ponto de troca até
+ * o foco estabilizar, sem reiniciar a animação a cada card.
  */
 const FADE_TRIGGER_DEBOUNCE_MS = 120;
+const RAPID_FOCUS_THRESHOLD_MS = 200;
+const RAPID_FOCUS_IDLE_MS = 400;
 /**
  * Ponto do pulso (ver `@keyframes hero-fade-pulse` em Hero.css) em que o
  * filme exibido troca — no meio do platô de opacidade/desfoque mínimos
@@ -37,6 +38,8 @@ export function useHeroFocusFade(movie: Movie | null) {
     const debounceId = useRef<number | null>(null);
     const swapId = useRef<number | null>(null);
     const cleanupId = useRef<number | null>(null);
+    const lastChangeAt = useRef<number | null>(null);
+    const heldAnimation = useRef<Animation | null>(null);
 
     useLayoutEffect(() => {
         const from = previousMovie.current;
@@ -52,10 +55,43 @@ export function useHeroFocusFade(movie: Movie | null) {
         if (swapId.current !== null) window.clearTimeout(swapId.current);
         if (cleanupId.current !== null) window.clearTimeout(cleanupId.current);
 
+        const now = performance.now();
+        const isRapidChange = lastChangeAt.current !== null && now - lastChangeAt.current < RAPID_FOCUS_THRESHOLD_MS;
+        lastChangeAt.current = now;
+
+        const track = trackRef.current;
+        if (isRapidChange && track && !heldAnimation.current) {
+            track.classList.remove(FADE_CLASS);
+            track.getBoundingClientRect();
+            track.classList.add(FADE_CLASS);
+
+            // Reutiliza os keyframes atuais: mantém exatamente a máscara do
+            // pulso, sem criar outra camada ou outro efeito visual.
+            const animation = track.getAnimations().find(
+                (candidate) => candidate instanceof CSSAnimation && candidate.animationName === "hero-fade-pulse",
+            );
+            if (animation) {
+                animation.pause();
+                animation.currentTime = FADE_SWAP_MS;
+                heldAnimation.current = animation;
+            }
+        }
+
         debounceId.current = window.setTimeout(() => {
             debounceId.current = null;
             const el = trackRef.current;
             if (!el) return;
+
+            if (heldAnimation.current) {
+                setDisplayedMovie(movie);
+                heldAnimation.current.play();
+                heldAnimation.current = null;
+                cleanupId.current = window.setTimeout(() => {
+                    cleanupId.current = null;
+                    el.classList.remove(FADE_CLASS);
+                }, FADE_ANIMATION_MS - FADE_SWAP_MS);
+                return;
+            }
 
             // Remove e força reflow antes de reaplicar para permitir retrigger
             // da animação caso um pulso anterior ainda esteja em andamento.
@@ -72,7 +108,7 @@ export function useHeroFocusFade(movie: Movie | null) {
                 cleanupId.current = null;
                 el.classList.remove(FADE_CLASS);
             }, FADE_ANIMATION_MS);
-        }, FADE_TRIGGER_DEBOUNCE_MS);
+        }, heldAnimation.current ? RAPID_FOCUS_IDLE_MS : FADE_TRIGGER_DEBOUNCE_MS);
 
         return () => {
             if (debounceId.current !== null) {

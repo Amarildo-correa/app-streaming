@@ -27,7 +27,7 @@
 }
 
 .hero-slide-track--fading {
-    animation: hero-fade-pulse 360ms;
+    animation: hero-fade-pulse 240ms;
 }
 
 @keyframes hero-fade-pulse {
@@ -39,7 +39,7 @@
 
     32% {
         opacity: 0.4;
-        filter: blur(0.125rem);
+        filter: blur(0.25rem);
         animation-timing-function: linear;
     }
 
@@ -49,7 +49,7 @@
        enquanto a animação ainda está encobrindo, nunca depois dela. */
     46% {
         opacity: 0.4;
-        filter: blur(0.125rem);
+        filter: blur(0.25rem);
         animation-timing-function: ease-in;
     }
 
