@@ -12,3 +12,7 @@
 ## Direção adotada
 
 Ver "Plano de design" no plano de implementação (`docs/superpowers/plans/2026-09-13-smarttv-native-redesign.md`).
+
+## Veredito "depois"
+
+Todos os 6 achados do estado "antes" foram endereçados — ver `depois-home.png`, `depois-detail.png`, `depois-notfound.png` para comparação lado a lado com as capturas "antes".
