@@ -4,7 +4,7 @@
 
 **Goal:** Corrigir os três defeitos visuais/UX reportados pelo usuário após teste manual no browser — anel de foco parcialmente oculto, scrollbar interna visível dentro dos carrosséis, e a página não acompanhar o foco verticalmente (o card focado sai da viewport e o "cliente na frente da TV" perde o foco de vista) — e aplicar uma passada de design para reduzir a sensação de protótipo.
 
-**Architecture:** Correções são CSS-first (uma propriedade de overflow mal especificada é a causa raiz de 2 dos 3 bugs) mais uma pequena função utilitária de scroll compartilhada (`scrollFocusedIntoView`) que substitui o cálculo manual de `scrollLeft` por `Element.scrollIntoView()`, que já resolve simultaneamente o alinhamento horizontal dentro da linha e o alinhamento vertical da página.
+**Architecture:** Correções são CSS-first (a combinação de overflow horizontal oculto com padding vertical insuficiente causa 2 dos 3 bugs) mais uma pequena função utilitária de scroll compartilhada (`scrollFocusedIntoView`) que substitui o cálculo manual de `scrollLeft` por `Element.scrollIntoView()`, que já resolve simultaneamente o alinhamento horizontal dentro da linha e o alinhamento vertical da página.
 
 **Tech Stack:** Mesmo stack do plano anterior (React 19, TypeScript, Vite, Norigin Spatial Navigation). Validação visual via `chrome-devtools` CLI (headless), simulando um usuário de controle remoto — `/playwright-cli` não está disponível nesta sessão como skill instalada, então o CLI do chrome-devtools (já configurado e preferido pelas instruções do usuário) faz o papel equivalente: navegação por teclado + captura de screenshot em cada estado.
 
@@ -30,7 +30,7 @@
 ```
 src/
   utils/scrollFocusedIntoView.ts   - NOVO: helper compartilhado de scroll-para-foco
-  components/CarouselRow.css       - MODIFICADO: overflow-y explícito, scrollbar oculta
+  components/CarouselRow.css       - MODIFICADO: padding vertical suficiente para eliminar overflow real do card focado
   components/CarouselRow.tsx       - MODIFICADO: remove cálculo manual de scroll
   components/MovieCard.tsx         - MODIFICADO: usa o helper no onFocus
   components/FocusableButton.tsx   - MODIFICADO: usa o helper no onFocus
@@ -49,34 +49,34 @@ src/
 
 **Interfaces:** nenhuma mudança de interface — só CSS.
 
-- [ ] **Passo 1:** Editar `.carousel-row__track` para declarar `overflow-y` explicitamente como `visible` (evita a conversão automática do browser para `auto`) e ocultar a scrollbar horizontal nativa (que hoje já não aparece por estar `hidden`, mas deixamos explícito para Firefox/Safari também não reservarem espaço de scrollbar):
+- [x] **Passo 1:** Aumentar o padding vertical de `.carousel-row__track` para `var(--space-7)`, acomodando o card com `scale(1.12)` e seu anel de foco sem overflow real. Manter `overflow-x: hidden`: declarar `overflow-y: visible` não impediria seu valor computado `auto`. A ausência de scrollbar deve resultar de `scrollHeight === clientHeight`, sem apenas escondê-la.
 
 ```css
 .carousel-row__track {
     display: flex;
     gap: var(--space-5);
     overflow-x: hidden;
-    overflow-y: visible;
-    padding: var(--space-3) var(--space-5);
+    /* A folga vertical acomoda o scale(1.12) e o anel sem overflow real. */
+    padding: var(--space-7) var(--space-5);
     margin: 0 calc(var(--space-5) * -1);
 }
 ```
 
-- [ ] **Passo 2 (verificação manual via chrome-devtools CLI):** com `npm run dev` ativo, rodar:
+- [x] **Passo 2 (verificação manual via chrome-devtools CLI):** com `npm run dev` ativo, rodar:
 
 ```bash
 chrome-devtools new_page http://localhost:5173/
-chrome-devtools evaluate_script --pageId <id> "() => { const track = document.querySelector('.carousel-row__track'); return getComputedStyle(track).overflowY; }"
+chrome-devtools evaluate_script --pageId <id> "() => { const el = document.querySelector('.movie-card.is-focused'); const track = el.closest('.carousel-row__track'); const r = el.getBoundingClientRect(); const t = track.getBoundingClientRect(); const scale = r.width / el.offsetWidth; const ring = parseFloat(getComputedStyle(el).boxShadow.split(', rgba')[0].split(' ').at(-1)) * scale; return { overflowY: getComputedStyle(track).overflowY, scrollHeight: track.scrollHeight, clientHeight: track.clientHeight, noVerticalOverflow: track.scrollHeight === track.clientHeight, ringInsideTrack: r.top - ring >= t.top && r.bottom + ring <= t.bottom && r.left - ring >= t.left && r.right + ring <= t.right }; }"
 ```
 
-Esperado: `"visible"` (não mais `"auto"`).
+Esperado: `overflowY: "auto"` é normal; `noVerticalOverflow: true` e `ringInsideTrack: true` comprovam a correção. Medição do padding candidato a 1536×864: `scrollHeight = clientHeight = 421`, folga superior/inferior de `28.5` e lateral esquerda de `12`, maiores que a extensão do anel transformado (`3.584`, medidas DOM em pixels).
 
-- [ ] **Passo 3 (verificação visual):** `chrome-devtools resize_page <id> 1536 864` seguido de `chrome-devtools take_screenshot <id> --filePath ...`; abrir a imagem e confirmar visualmente que o anel branco de foco (`box-shadow` de `--shadow-focus`) aparece **inteiro** ao redor do primeiro card (topo, base, esquerda e direita), sem nenhuma barra de rolagem fina visível dentro da área do carrossel.
-- [ ] **Passo 4 (commit):**
+- [x] **Passo 3 (verificação visual):** `chrome-devtools resize_page <id> 1536 864` seguido de `chrome-devtools take_screenshot <id> --filePath ...`; abrir a imagem e confirmar visualmente que o anel branco de foco (`box-shadow` de `--shadow-focus`) aparece **inteiro** ao redor do primeiro card (topo, base, esquerda e direita), sem nenhuma barra de rolagem fina visível dentro da área do carrossel. Nesta tarefa, capturar também com `--fullPage` para inspecionar a base do anel, pois o acompanhamento vertical da viewport só será implementado na Tarefa 2.
+- [x] **Passo 4 (commit):**
 
 ```bash
-git add src/components/CarouselRow.css
-git commit -m "fix: corrigir overflow-y da trilha do carrossel para nao cortar o anel de foco"
+git add src/components/CarouselRow.css docs/superpowers/plans/2026-09-13-tv-ui-focus-fixes.md
+git commit -m "fix: ampliar padding da trilha para eliminar overflow vertical e preservar o anel de foco"
 ```
 
 ---

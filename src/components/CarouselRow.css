@@ -11,6 +11,7 @@
   display: flex;
   gap: var(--space-5);
   overflow-x: hidden;
-  padding: var(--space-3) var(--space-5);
+  /* A folga vertical acomoda o scale(1.12) e o anel sem overflow real. */
+  padding: var(--space-7) var(--space-5);
   margin: 0 calc(var(--space-5) * -1);
 }
