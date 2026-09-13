@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FocusContext, useFocusable } from '@noriginmedia/norigin-spatial-navigation-react';
 import { getMovieBySlug } from '../data/movies';
 import { FocusableButton } from '../components/FocusableButton';
+import { CastMemberButton } from '../components/CastMemberButton';
 import { NotFound } from './NotFound';
 import './MovieDetail.css';
 
@@ -93,17 +94,7 @@ export function MovieDetail() {
           <div className="movie-detail__cast-grid">
             {movie.cast.map((member) => (
               <div key={member.name} className="cast-member">
-                <img
-                  src={member.photoUrl}
-                  width={100}
-                  height={100}
-                  loading="lazy"
-                  alt={member.name}
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = `https://picsum.photos/seed/${movie.slug}-cast-fallback/100/100`;
-                  }}
-                />
+                <CastMemberButton member={member} movieSlug={movie.slug} />
                 <span className="cast-member__name">{member.name}</span>
                 <span className="cast-member__character">{member.character}</span>
               </div>

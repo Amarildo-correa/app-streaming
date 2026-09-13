@@ -82,10 +82,26 @@
   text-align: center;
 }
 
-.cast-member img {
-  width: 6.25rem;
-  height: 6.25rem;
-  border-radius: 50%;
+.cast-member__button {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-round);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: var(--transition-focus);
+}
+
+.cast-member__button.is-focused,
+.cast-member__button:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.cast-member__button img {
+  width: var(--cast-photo-size);
+  height: var(--cast-photo-size);
+  border-radius: var(--radius-round);
   object-fit: cover;
 }
 

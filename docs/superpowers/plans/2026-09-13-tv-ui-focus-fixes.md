@@ -336,11 +336,11 @@ git commit -m "style: reforcar tipografia do hero e contraste do titulo dos card
 
 ## Tarefa 5: Validação end-to-end simulando um usuário de controle remoto
 
-**Files:** nenhum (apenas comandos via `chrome-devtools` CLI e checagem manual)
+**Files:** comandos via `chrome-devtools` CLI e checagem manual. Durante esta tarefa, o usuário também solicitou transformar as fotos do elenco em botões: adicionar `src/components/CastMemberButton.tsx` e atualizar `src/routes/MovieDetail.tsx`, `src/routes/MovieDetail.css` e `src/styles/tokens.css`.
 
-- [ ] **Passo 1:** `npm run build` e `npm run lint` — devem continuar limpos.
-- [ ] **Passo 2:** Com `npm run dev` ativo, abrir a Home via `chrome-devtools new_page` e redimensionar para `1536x864` (viewport de notebook, o cenário mais apertado verticalmente — se funcionar aqui, funciona em telas de TV maiores).
-- [ ] **Passo 3:** Simular o percurso completo de um espectador com controle remoto, tirando screenshot a cada parada e usando `evaluate_script` para confirmar `withinViewport` (ver fórmula da Tarefa 2, Passo 5) em cada uma:
+- [x] **Passo 1:** `npm run build` e `npm run lint` — devem continuar limpos.
+- [x] **Passo 2:** Com `npm run dev` ativo, abrir a Home via `chrome-devtools new_page` e redimensionar para `1536x864` (viewport de notebook, o cenário mais apertado verticalmente — se funcionar aqui, funciona em telas de TV maiores).
+- [x] **Passo 3:** Simular o percurso completo de um espectador com controle remoto, tirando screenshot a cada parada e usando `evaluate_script` para confirmar `withinViewport` (ver fórmula da Tarefa 2, Passo 5) em cada uma:
     1. Estado inicial (primeiro card da linha "Ação" focado).
     2. `ArrowRight` × 11 até o último card da linha "Ação" — screenshot no 6º e no 11º.
     3. `ArrowDown` para a linha "Ficção Científica" — screenshot confirmando que a linha ficou visível e sem scrollbar nativa.
@@ -348,11 +348,28 @@ git commit -m "style: reforcar tipografia do hero e contraste do titulo dos card
     5. `Enter` no último card focado — screenshot da página de Detalhe.
     6. Dentro do Detalhe, `ArrowRight` entre os 3 botões de ação — confirmar que o foco visível troca de botão e nenhum fica fora da viewport.
     7. `Backspace` — confirmar retorno à Home com foco restaurado no card de origem (mesmo card do passo 5) e visível na viewport (sem precisar de scroll manual do usuário).
-- [ ] **Passo 4:** Revisar todos os screenshots capturados nesta tarefa em sequência (como um "storyboard") e confirmar que em nenhum deles: (a) aparece scrollbar nativa do browser, (b) o anel de foco aparece cortado, (c) o card/botão focado está parcial ou totalmente fora da área visível.
-- [ ] **Passo 5:** Se qualquer verificação falhar, voltar à tarefa correspondente (1, 2 ou 3) e corrigir antes de prosseguir — não seguir para o commit final com um problema conhecido em aberto.
-- [ ] **Passo 6 (commit final, se algo foi ajustado durante a validação):**
+- [x] **Passo 4:** Revisar todos os screenshots capturados nesta tarefa em sequência (como um "storyboard") e confirmar que em nenhum deles: (a) aparece scrollbar nativa do browser, (b) o anel de foco aparece cortado, (c) o card/botão focado está parcial ou totalmente fora da área visível.
+- [x] **Passo 5:** Se qualquer verificação falhar, voltar à tarefa correspondente (1, 2 ou 3) e corrigir antes de prosseguir — não seguir para o commit final com um problema conhecido em aberto.
+- [x] **Passo 6 (commit final, se algo foi ajustado durante a validação):**
 
 ```bash
 git add -A
 git commit -m "fix: ajustes finais da validacao end-to-end de foco/scroll"
 ```
+
+### Ajuste solicitado durante a validação: botões nas fotos do elenco
+
+- [x] Envolver cada imagem em `button type="button"`, preservando `div.cast-member`, nome, personagem, `alt`, dimensões, lazy loading e fallback.
+- [x] Integrar com `useFocusable`, `ref` no botão real, chave estável por filme e integrante e scroll centralizado ao receber foco.
+- [x] Preservar a foto circular e aplicar `--shadow-focus` ao foco espacial e `:focus-visible`. Sincronizar foco nativo e clique com a navegação espacial.
+- [x] Validar os seis botões usando setas, screenshot e `evaluate_script`; voltar às ações com seta para cima e à Home com Backspace, restaurando o card de origem.
+
+### Resultado da execução
+
+- Build TypeScript/Vite e Oxlint passaram, inclusive após a inclusão dos botões do elenco.
+- Viewport de validação: 1536×864. Os 24 cards foram percorridos com setas; os três botões de ação e as seis fotos do elenco foram alcançados com foco visível.
+- Cards finais: 320×180 em uma raiz de 16 pixels, proporção 16:9; trilhas com `scrollHeight === clientHeight === 252`. Padding superior de 1,5rem, inferior de 3rem e anel inteiro nos extremos das linhas.
+- `withinViewport`, `ringInsideViewport`, `ringInsideTrack` e ausência de overflow vertical passaram nos estados verificados. `scrollbar-width: none` na página; o scroll continuou acompanhando o foco.
+- Home → Detalhe → Backspace restaurou “Última Transmissão”, incluindo retorno após navegar pelo elenco. Deep link e refresh em `/movie/ultima-transmissao`, filme inexistente e rota inexistente foram verificados; o botão de NotFound retornou à Home.
+- A medição de retorno do elenco inicialmente capturou a rolagem suave ainda em movimento (`scrollLeft: 2684`, antes de atingir `2690`). O verificador passou a aguardar a estabilização dos retângulos e scroll por frames antes de medir; duas repetições passaram, sem temporizadores ou ajustes adicionais no código do app.
+- Screenshots e JSONs de `evaluate_script` estão em `C:/Users/amari/AppData/Local/Temp/tv-ui-focus-20260913/`: `task1-*`, `task2-*`, `task3-spacing-*`, `task4-*`, `final-*` e `cast-*`. O script `check-focus.ps1` no mesmo diretório executa as medições via CLI.
