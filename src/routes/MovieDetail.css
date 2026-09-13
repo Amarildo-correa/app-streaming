@@ -2,19 +2,18 @@
     position: relative;
 }
 
-.movie-detail__hero {
-    position: relative;
+.movie-detail__overview {
+    display: grid;
+    grid-template-columns: minmax(18rem, 40%) minmax(0, 1fr);
+    min-height: 31rem;
     width: calc(100% + var(--safe-area) * 2);
-    height: 30rem;
     margin-inline: calc(var(--safe-area) * -1);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-7);
     overflow: hidden;
-    background: var(--color-surface);
 }
 
 .movie-detail__backdrop {
-    position: absolute;
-    inset: 0;
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -23,15 +22,37 @@
 .movie-detail__gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent 0%, rgba(11, 13, 18, 0.55) 55%, var(--color-bg) 100%);
+    background: linear-gradient(90deg, var(--color-bg) 0%, rgba(11, 13, 18, 0.72) 25%, transparent 70%);
 }
 
-.movie-detail__hero-content {
+.movie-detail__content-column {
+    display: flex;
+    position: relative;
+    z-index: 2;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding: var(--space-7) var(--safe-area);
+}
+
+.movie-detail__backdrop-column {
+    position: relative;
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.movie-detail__backdrop-column::after {
     position: absolute;
-    left: var(--safe-area);
-    right: var(--safe-area);
-    bottom: var(--space-6);
-    max-width: 48rem;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    height: 35%;
+    content: "";
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 0%, var(--color-bg) 100%);
 }
 
 .movie-detail__title {
@@ -143,4 +164,25 @@
 .cast-member__character {
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
+}
+
+
+@media (max-width: 52rem) {
+    .movie-detail__overview {
+        grid-template-columns: 1fr;
+    }
+
+    .movie-detail__content-column {
+        grid-row: 2;
+    }
+
+    .movie-detail__backdrop-column {
+        grid-column: 1;
+        grid-row: 1;
+        min-height: 20rem;
+    }
+
+    .movie-detail__gradient {
+        background: linear-gradient(180deg, transparent 0%, var(--color-bg) 100%);
+    }
 }
