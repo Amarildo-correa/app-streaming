@@ -1,12 +1,23 @@
 .movie-card {
   position: relative;
   width: var(--movie-card-width);
+  aspect-ratio: var(--movie-card-aspect-ratio);
+  isolation: isolate;
   flex: 0 0 auto;
   cursor: pointer;
   transition: var(--transition-focus);
   border-radius: var(--radius-md);
   /* Reserva espaço para o crescimento e o anel ao acompanhar o foco. */
   scroll-margin-block: var(--space-7);
+}
+
+.movie-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--gradient-card);
+  pointer-events: none;
 }
 
 .movie-card img {
@@ -18,10 +29,14 @@
 }
 
 .movie-card__title {
+  position: absolute;
+  inset-inline: var(--space-3);
+  bottom: var(--space-3);
+  z-index: var(--layer-content);
   display: block;
-  margin-top: var(--space-2);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  text-shadow: var(--shadow-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -29,11 +44,7 @@
 
 .movie-card.is-focused {
   position: relative;
-  z-index: 1;
+  z-index: var(--layer-content);
   transform: scale(1.12);
   box-shadow: var(--shadow-focus);
-}
-
-.movie-card.is-focused .movie-card__title {
-  color: var(--color-text);
 }

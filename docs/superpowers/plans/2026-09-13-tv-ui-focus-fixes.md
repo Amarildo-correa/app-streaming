@@ -278,31 +278,34 @@ git commit -m "style: ocultar scrollbar nativa da pagina mantendo scroll funcion
 
 - Modify: `src/components/Hero.css`
 - Modify: `src/components/MovieCard.css`
+- Modify: `src/styles/tokens.css` — peso, tracking, sombra de texto, gradiente e camada de conteúdo.
 
 Usar a skill /frontend-design antes de aplicar esta tarefa (carregar e seguir suas diretrizes de tipografia/hierarquia/contraste); os ajustes concretos abaixo são o resultado mínimo esperado dessa passada — outros refinamentos que a skill sugerir e que não quebrem as Restrições Globais podem ser incorporados no mesmo commit.
 
 **Interfaces:** nenhuma — só CSS.
 
-- [ ] **Passo 1:** Em `src/components/Hero.css`, reforçar a legibilidade do texto sobre o backdrop e dar mais peso tipográfico ao título (a fonte "Roboto" com `font-weight: 400` padrão fica fraca em telas grandes de TV):
+- [x] **Passo 1:** Em `src/components/Hero.css`, reforçar a legibilidade do texto sobre o backdrop e explicitar o peso tipográfico do título usando tokens (o `h1` já herdava peso 700 do estilo padrão do browser):
 
 ```css
 .hero__title {
     font-size: var(--font-size-3xl);
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-display);
     margin: 0 0 var(--space-2) 0;
-    text-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.8);
+    text-shadow: var(--shadow-text);
 }
 ```
 
 (Substituir a regra `.hero__title` existente por esta.)
 
-- [ ] **Passo 2:** Em `src/components/MovieCard.css`, adicionar um leve gradiente escuro sobre a base do pôster para a faixa de título ter contraste consistente independentemente da imagem de fundo (hoje os pôsteres são fotos aleatórias do picsum.photos, com luminosidade muito variada entre si):
+- [x] **Passo 2:** Em `src/components/MovieCard.css`, adicionar gradiente escuro sobre a base da imagem horizontal e posicionar o título acima dele, preservando a proporção 16:9 do card inteiro. Usar `isolation: isolate` e uma camada de conteúdo para o gradiente não escurecer o texto. Centralizar o gradiente em `--gradient-card` e aumentar a fonte do título para `--font-size-md`.
 
 ```css
 .movie-card {
     position: relative;
-    width: 12.5rem;
+    width: var(--movie-card-width);
+    aspect-ratio: var(--movie-card-aspect-ratio);
+    isolation: isolate;
     flex: 0 0 auto;
     cursor: pointer;
     transition: var(--transition-focus);
@@ -314,18 +317,18 @@ Usar a skill /frontend-design antes de aplicar esta tarefa (carregar e seguir su
     position: absolute;
     inset: 0;
     border-radius: var(--radius-md);
-    background: linear-gradient(180deg, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
+    background: var(--gradient-card);
     pointer-events: none;
 }
 ```
 
-(Adicionar a nova regra `.movie-card::after` junto às regras existentes de `.movie-card`, sem remover `position: relative`.)
+(Adicionar a nova regra `.movie-card::after` junto às regras existentes de `.movie-card`, sem remover `position: relative` nem a margem de scroll. O título usa posição absoluta, recuo lateral/inferior `--space-3`, `z-index: var(--layer-content)`, `color: var(--color-text)` e `text-shadow: var(--shadow-text)`.)
 
-- [ ] **Passo 3 (verificação visual):** capturar novo screenshot da Home e comparar lado a lado com o screenshot anterior (antes desta tarefa) — confirmar que o título de cada card ficou legível mesmo sobre pôsteres claros (ex.: "Fúria de Aço", que usa uma foto de floresta com neblina bem clara).
-- [ ] **Passo 4 (commit):**
+- [x] **Passo 3 (verificação visual):** capturar novo screenshot da Home e comparar com o screenshot anterior — confirmar que os títulos ficaram legíveis sobre as imagens horizontais claras (ex.: "Fúria de Aço" e "Órbita Perdida"). Confirmado nas duas linhas, com o anel completo e a proporção 16:9.
+- [x] **Passo 4 (commit):**
 
 ```bash
-git add src/components/Hero.css src/components/MovieCard.css
+git add src/components/Hero.css src/components/MovieCard.css src/styles/tokens.css docs/superpowers/plans/2026-09-13-tv-ui-focus-fixes.md
 git commit -m "style: reforcar tipografia do hero e contraste do titulo dos cards"
 ```
 
