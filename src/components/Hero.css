@@ -1,54 +1,73 @@
 .hero {
-  position: relative;
-  width: 100%;
-  height: 26rem;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  margin-bottom: var(--space-6);
-  background: var(--color-surface);
+    position: relative;
+    width: calc(100% + var(--safe-area) * 2);
+    height: 34rem;
+    margin-inline: calc(var(--safe-area) * -1);
+    margin-bottom: var(--space-6);
+    overflow: hidden;
+    background: var(--color-surface);
 }
 
 .hero--empty {
-  height: 26rem;
+    height: 34rem;
+    width: calc(100% + var(--safe-area) * 2);
+    margin-inline: calc(var(--safe-area) * -1);
 }
 
 .hero__backdrop {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .hero__gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 12, 0.4) 50%, rgba(10, 10, 12, 0.95) 100%);
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(11, 13, 18, 0.55) 55%, var(--color-bg) 100%);
 }
 
 .hero__content {
-  position: absolute;
-  left: var(--space-6);
-  bottom: var(--space-6);
-  max-width: 40rem;
+    position: absolute;
+    left: var(--safe-area);
+    right: var(--safe-area);
+    bottom: var(--space-7);
+    max-width: 42rem;
 }
 
 .hero__title {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--letter-spacing-display);
-  margin: 0 0 var(--space-2) 0;
-  text-shadow: var(--shadow-text);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-display);
+    margin: 0 0 var(--space-3) 0;
+    text-shadow: var(--shadow-text);
 }
 
-.hero__meta {
-  font-size: var(--font-size-md);
-  color: var(--color-text-muted);
-  margin: 0 0 var(--space-3) 0;
+.hero__badges {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.hero__badge {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-raised);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+}
+
+.hero__badge--accent {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
 }
 
 .hero__synopsis {
-  font-size: var(--font-size-md);
-  line-height: 1.5;
-  margin: 0;
+    font-size: var(--font-size-md);
+    line-height: 1.5;
+    margin: 0;
 }
