@@ -11,7 +11,7 @@
 
 .carousel-row__track {
   display: flex;
-  gap: calc(var(--space-5) + var(--space-2));
+  gap: var(--space-5);
   overflow-x: hidden;
   /* Cards horizontais precisam de menos folga acima para o scale e o anel. */
   padding: var(--space-5) var(--space-5) var(--space-7);
