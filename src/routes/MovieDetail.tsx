@@ -13,7 +13,7 @@ export function MovieDetail() {
     const movie = getMovieBySlug(decodeURIComponent(slug));
     const { ref, focusKey, focusSelf } = useFocusable({
         isFocusBoundary: true,
-        focusBoundaryDirections: ["left", "right", "down"],
+        focusBoundaryDirections: ["up", "down", "right"],
     });
     useEffect(() => {
         focusSelf();
