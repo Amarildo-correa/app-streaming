@@ -1,46 +1,73 @@
 # AGENTS.md
 
-Este arquivo fornece orientações ao Claude Code (claude.ai/code) ao trabalhar com código neste repositório.
+Este é o documento normativo do repositório para agentes de código. Ele descreve o estado atual do app e as regras que devem ser seguidas ao modificar a implementação. O arquivo `CLAUDE.md` apenas referencia este documento; não duplique regras nele.
 
-## Projeto
+## Produto e escopo
 
-Um app de streaming / Smart TV construído com React 19 + TypeScript + Vite, navegável por controle remoto/setas via `@noriginmedia/norigin-spatial-navigation-react` e `@noriginmedia/norigin-spatial-navigation-core`. Já implementado: rota Home (hero full-bleed + carrosséis por gênero), rota de Detalhe do filme (`/movie/:slug`, backdrop full-bleed, badges de metadado, elenco em carrossel horizontal e ações) e rota NotFound, todas roteadas via `react-router-dom` v7. Os dados são um catálogo mock local (`src/data/movies.ts`), sem backend/API real — pôsteres, backdrops e fotos de elenco são gerados via `picsum.photos` com fallback `onError` para uma variação de seed caso a imagem original falhe.
+O projeto é um app de streaming para Smart TV feito com React 19, TypeScript e Vite. A navegação principal é controlada por setas/controle remoto usando `@noriginmedia/norigin-spatial-navigation-react` e `@noriginmedia/norigin-spatial-navigation-core`.
 
-A identidade visual segue um redesign de UX de app nativo de Smart TV (concluído em 2026-09-13): paleta "cinema à noite" (obsidiana `#0b0d12` + acento âmbar `#e8a33d` como única cor de destaque, sem o vermelho/preto genérico estilo template), tipografia dupla (Bebas Neue para o título em destaque no Hero/MovieDetail, Manrope para o resto da UI), navegação lateral fixa (`NavRail`, substitui o antigo header horizontal) e metadados sempre como badges/pills separados — nunca como string unida por "·". Documentação do processo de redesign (plano, análise antes/depois, screenshots) fica em `docs/superpowers/`.
+O catálogo é mock e local em `src/data/movies.ts`; não existe backend nem API de produção. Pôsteres, backdrops e fotos de elenco usam `picsum.photos` e os componentes de imagem têm fallback para outro seed quando o carregamento falha.
+
+Rotas implantadas: `/` para Home, `/movie/:slug` para detalhe do filme e `*` para NotFound. O roteador usa `createBrowserRouter` com `basename: import.meta.env.BASE_URL`; a configuração do Vite define `base: '/app-streaming/'` para o GitHub Pages.
 
 ## Comandos
 
-- `npm run dev` — inicia o servidor de desenvolvimento do Vite
-- `npm run build` — checagem de tipos (`tsc -b`) seguida de build de produção via Vite
-- `npm run lint` — executa o Oxlint (config em `.oxlintrc.json`)
-- `npm run preview` — visualiza o build de produção localmente
+- `npm run dev` inicia o servidor Vite local.
+- `npm run build` executa `tsc -b` e o build de produção com Vite.
+- `npm run lint` executa o Oxlint configurado em `.oxlintrc.json`.
+- `npm run preview` serve o build de produção localmente.
 
-Ainda não há test runner configurado neste repositório.
+Não há test runner configurado. Toda alteração deve ser validada, no mínimo, com `npm run build`; execute também `npm run lint` quando alterar TypeScript, JSX ou regras estruturais de CSS.
 
-## Notas de arquitetura
+## Estrutura de entrada e roteamento
 
-- A ferramenta de build é o Vite com `@vitejs/plugin-react` (`vite.config.ts`).
-- O TypeScript está dividido em `tsconfig.app.json` (código-fonte do app, resolução via bundler, `verbatimModuleSyntax`, `noUnusedLocals`/`noUnusedParameters` habilitados) e `tsconfig.node.json` (config do próprio Vite); `tsconfig.json` apenas referencia os dois.
-- O lint usa Oxlint (não ESLint) — as regras ficam em `.oxlintrc.json` com os plugins `react`, `typescript` e `oxc` habilitados.
-- Ponto de entrada: `src/main.tsx` monta `<RouterProvider>` (`src/router.tsx`) em `#root` (ver `index.html`). O roteamento usa `createBrowserRouter` com `App` (`src/App.tsx`) como layout raiz (`<Outlet />`) para as rotas Home, MovieDetail e NotFound.
-- `App.tsx` chama `init()` de `@noriginmedia/norigin-spatial-navigation-core` no module scope (fora do componente) para inicializar a navegação espacial uma única vez antes da primeira renderização — não mover essa chamada para dentro de um efeito/render.
-- Ícones vêm de uma webfont carregada por CDN (Material Symbols Rounded, via Google Fonts) — nunca escrever SVG inline nem importar ícones por componente (ver `src/components/Icon.tsx`). Fontes de texto (Bebas Neue + Manrope) também são carregadas por CDN no `index.html`, sempre com stack de fallback local declarada.
-- Design tokens (cores, espaçamento, tipografia, sombra de foco, transições, largura do rail) ficam centralizados em `src/styles/tokens.css` como custom properties; todo CSS novo deve consumir esses tokens em vez de valores soltos. Acento de cor único: `--color-accent`/`--color-focus` (âmbar) — evitar introduzir outras cores de destaque.
-- Layout raiz é `flex row`: `NavRail` (rail lateral fixo, `position: sticky`, `height: 100vh`) + `<main class="app-content">` com o `<Outlet />` das rotas (`src/App.tsx`, `.app-shell`/`.app-content` em `src/index.css`). Hero (Home) e backdrop (MovieDetail) são full-bleed — sangram até a borda da viewport via margem negativa de `--safe-area`, sem card arredondado/padding lateral.
-- `NavRail` (`src/components/NavRail.tsx`/`.css`) fica colapsado mostrando só ícones por padrão; expande (`--rail-width-expanded`) e revela os rótulos de texto quando algum item interno está focado, via seletor `:has(.nav-rail__item.is-focused)` (com `:focus-within` como fallback de foco real de DOM) — a navegação espacial do Norigin não move `document.activeElement`, só aplica uma classe virtual `is-focused`, por isso o `:has()` é necessário. Rótulo (`<span class="nav-rail__label">`) e ícone (`<span class="icon">` de `Icon.tsx`) precisam de classes distintas nesse CSS — um seletor genérico `span` esconderia o ícone junto com o rótulo no estado colapsado.
+- `src/main.tsx` monta o `RouterProvider` em `#root`.
+- `src/router.tsx` declara as rotas e o `basename`.
+- `src/App.tsx` é o layout raiz: fornece o contexto de foco `app`, renderiza `NavRail` e entrega a rota no `<main class="app-content">`.
+- `src/routes/Home.tsx` gerencia o filme em destaque e restaura o foco do card ao retornar do detalhe.
+- `src/routes/MovieDetail.tsx` exibe backdrop, metadados em badges, sinopse, ações e carrossel de elenco.
+- `src/routes/NotFound.tsx` é a rota terminal para caminhos desconhecidos.
+- `src/components` contém Hero, NavRail, carrosséis, cards, botões focáveis, ícones e membros do elenco.
+- `src/styles/tokens.css` é a fonte dos tokens de cor, espaçamento, tipografia, raios, sombras, camadas e transições.
 
-## Navegação espacial (foco por controle remoto/setas de TV)
+## Design e CSS
 
-Ao construir ou modificar qualquer UI focável (menus, linhas, modais, botões alcançáveis por controle remoto/setas), use a skill `norigin-spatial-navigation-react` — ela cobre o hook `useFocusable`, a configuração de `FocusContext.Provider` para componentes container/leaf, foco programático via `setFocus`/`doesFocusableExist`, e captura de foco para modais (`isFocusBoundary`). Pontos-chave que não podem ser violados:
+A identidade visual atual é "cinema à noite": fundo obsidiana, texto claro, superfícies escuras e âmbar como único acento de destaque. O título usa `Bebas Neue`; o restante da interface usa `Manrope`, com fallbacks declarados no token correspondente. Ícones são a webfont Material Symbols Rounded carregada no `index.html`; use `src/components/Icon.tsx` e não crie SVG inline nem importe ícones individuais.
 
-- Todo componente focável deve anexar o `ref` retornado pelo hook a um elemento DOM real.
-- Componentes container devem envolver seus filhos em `<FocusContext.Provider value={focusKey}>`, ou esses filhos ficam inalcançáveis a partir de containers irmãos.
-- **Um `useFocusable` só enxerga o `FocusContext` acima de onde ele é CHAMADO, não o `FocusContext.Provider` que o mesmo componente renderiza.** Se um componente A renderiza `<FocusContext.Provider value={focusKey}>` e, no corpo da própria função A, chama `useFocusable` para um sub-elemento que só existe dentro desse Provider, esse hook lê o contexto de FORA de A (o pai de A), não o Provider que A acabou de declarar — o sub-elemento vira irmão de A na árvore de foco em vez de filho. Sempre que uma seção precisa do próprio escopo de foco aninhado dentro do container que a envolve, extraia-a para um componente filho separado (ver `MovieDetailCast` dentro de `src/routes/MovieDetail.tsx` como referência) para que o `useFocusable` dessa seção rode dentro da árvore JSX correta.
-- Valores de `focusKey` devem ser estáveis entre renders — não regenerá-los a cada render.
-- `focusBoundaryDirections` (passado a `useFocusable` num boundary) lista as direções BLOQUEADAS de escalar para o resolver do componente pai — não as direções permitidas. Ao mudar o layout raiz (ex.: trocar eixo de navegação entre regiões), revisar todo `useFocusable` com `isFocusBoundary`/`focusBoundaryDirections` em cada rota, não só no container que mudou — um valor esquecido bloqueia silenciosamente a direção que deveria escalar (ex.: rotas terminais como MovieDetail/NotFound precisam liberar `left` para alcançar o `NavRail` lateral).
-- Padrão de restauração de foco entre rotas: ao navegar de MovieDetail de volta para Home, o `slug` de origem é passado via `navigate('/', { state: { fromSlug } })`; a Home lê esse estado em `useEffect` e chama `setFocus('card-' + slug)` (com fallback para `doesFocusableExist`) para restaurar o foco no card correto em vez de resetar para o primeiro item.
-- Rotas terminais sem carrossel (MovieDetail, NotFound) usam `isFocusBoundary: true` + `focusSelf()` em `useEffect` para capturar o foco assim que a rota monta.
+Use os custom properties de `src/styles/tokens.css` em CSS novo. Não introduza outra cor de destaque, valores de espaçamento ou tipografia sem necessidade. Preserve a convenção atual de unidades relativas (`rem`, `em`, `vw`) e os raios pequenos ou em formato pill usados pelo design.
 
-## Browser APIs para experiência de app nativo de Smart TV (planejamento futuro)
+O layout raiz é uma linha flexível com `NavRail` à esquerda e `.app-content` à direita. Home e MovieDetail usam áreas full-bleed, com margens negativas baseadas em `--safe-area`; não envolva essas áreas em cards decorativos ou bordas arredondadas externas.
 
-Quando o desenvolvimento avançar, avaliar a implantação de Browser APIs que aproximam a experiência web de um app nativo de OS de Smart TV: Wake Lock (impedir a tela de dormir durante o playback), Fullscreen API, Media Session (controles de mídia do SO/controle remoto) e Gamepad API (complementar à navegação espacial via controle remoto/joystick), entre outras relevantes ao domínio de streaming. Toda API dessa categoria deve ter fallback para browsers/plataformas sem suporte — nunca assumir disponibilidade sem feature-detection prévia.
+O Hero usa duas colunas: `.hero__content-column` tem largura fixa de `34rem` e `.hero__backdrop-column` ocupa o espaço restante e se estende pela largura do rail expandido. MovieDetail segue a mesma ideia com conteúdo separado do backdrop. Ao alterar essas colunas, confira o media query de `52rem` e mantenha o backdrop atrás do conteúdo.
+
+Metadados devem permanecer como badges/pills separados. Em MovieDetail, `.movie-detail__badges` usa quebra de linha controlada por `column-gap` e `row-gap`; o espaçamento entre badges não deve ser recriado juntando valores com `·`.
+
+## Navegação espacial
+
+`App.tsx` chama `initNavigation` uma única vez no escopo do módulo, antes da primeira renderização, com `debug: false`, `visualDebug: false` e `distanceCalculationMethod: 'corners'`. Não mova essa inicialização para um componente, efeito ou handler.
+
+Todo componente focável deve anexar o `ref` retornado por `useFocusable` a um elemento DOM real. Todo container que possui filhos focáveis deve envolver os filhos com `<FocusContext.Provider value={focusKey}>`. Um `FocusContext.Provider` renderizado pelo próprio componente não altera o contexto lido por hooks chamados antes dele; extraia a seção para um componente filho quando for necessário criar um escopo aninhado. `MovieDetailCast` é o padrão existente.
+
+Use `focusKey` estável quando o elemento for alvo de `setFocus` ou `doesFocusableExist`. Não gere chaves novas a cada render. Ative `trackChildren` e `saveLastFocusedChild` apenas em containers que precisam acompanhar ou restaurar o filho focado.
+
+O container `app` usa `nextFocusResolver`: esquerda a partir do conteúdo vai para `nav-rail`, e direita a partir do rail vai para o primeiro foco válido do conteúdo. O `NavRail` é boundary e bloqueia `up`, `down` e `left`, deixando a direita alcançar o conteúdo. MovieDetail e NotFound são rotas terminais com boundary e captura de foco na montagem; mantenha a direção esquerda liberada para alcançar o rail.
+
+Ao voltar de MovieDetail para Home, navegue com `navigate('/', { state: { fromSlug } })`. Home deve tentar restaurar `card-${fromSlug}` após a montagem, usando `doesFocusableExist` antes de `setFocus`, e ter fallback para `home` ou para o primeiro card.
+
+Botões focáveis devem usar `FocusableButton`, responder a Enter pelo `onEnterPress` e manter o callback de foco que centraliza o elemento com `scrollFocusedIntoView`. Cards, itens do rail e membros do elenco devem seguir os componentes focáveis existentes em vez de criar controles paralelos.
+
+`focusBoundaryDirections` representa direções bloqueadas, não direções permitidas. Sempre que o eixo ou a hierarquia do layout mudar, revise os boundaries da rota afetada, do `NavRail` e do `App` em conjunto.
+
+## Imagens e acessibilidade
+
+Imagens de catálogo devem ter dimensões explícitas quando o formato for conhecido, `alt` adequado quando forem informativas e `alt=""` quando forem puramente decorativas. Preserve os fallbacks `onError` existentes para recursos de `picsum.photos`. Controles devem continuar sendo elementos semânticos, com `type="button"` em botões e labels acessíveis em navegação.
+
+## Deploy
+
+O deploy é feito pelo workflow `.github/workflows/deploy.yml` em todo push para `main` ou manualmente via `workflow_dispatch`. O workflow roda `npm ci`, `npm run build`, copia `dist/index.html` para `dist/404.html`, publica o artefato e executa `actions/deploy-pages` no ambiente `github-pages`.
+
+Antes de considerar uma alteração pronta, confirme `npm run build`, `npm run lint` quando aplicável e o estado do Git. Não faça commit ou push automaticamente, a menos que o usuário peça explicitamente. O deploy remoto só deve ser considerado concluído quando a execução do workflow terminar com sucesso.
+
+## Documentação visual
+
+Planos e registros do redesign ficam em `docs/superpowers/`; imagens de referência ficam em `docs/base/` e screenshots de navegação ficam em `docs/superpowers/screenshots/`. Ao modificar o layout visual, preserve essa documentação e compare screenshots quando houver uma referência correspondente.
