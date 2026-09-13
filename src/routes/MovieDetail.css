@@ -5,10 +5,10 @@
 .movie-detail__overview {
     display: grid;
     grid-template-columns: minmax(18rem, 40%) minmax(0, 1fr);
-    min-height: 31rem;
+    min-height: 26rem;
     width: calc(100% + var(--safe-area) * 2);
     margin-inline: calc(var(--safe-area) * -1);
-    margin-bottom: var(--space-7);
+    margin-bottom: 0;
     overflow: hidden;
 }
 
@@ -90,7 +90,7 @@
     flex-direction: column;
     gap: var(--space-3);
     max-width: 48rem;
-    margin-bottom: var(--space-7);
+    margin-bottom: 0;
 }
 
 .movie-detail__synopsis {

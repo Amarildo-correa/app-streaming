@@ -61,7 +61,7 @@ export function MovieDetail() {
                             <p className="movie-detail__synopsis">{movie.synopsis}</p>
                             <p className="movie-detail__director">Direção: {movie.director}</p>
                             <div className="movie-detail__actions">
-                                <FocusableButton label="Assistir" iconName="play_arrow" onPress={() => {}} focusKey="detail-watch" variant="primary" />
+                                <FocusableButton label="Assistir" iconName="play_arrow" onPress={() => {}} focusKey="detail-watch" variant="secondary" />
                                 <FocusableButton label="Minha lista" iconName="add" variant="secondary" onPress={() => {}} focusKey="detail-list" />
                                 <FocusableButton label="Voltar" iconName="arrow_back" variant="secondary" onPress={goBack} focusKey="detail-back" />
                             </div>

@@ -69,7 +69,8 @@
 .nav-rail__item.is-focused,
 .nav-rail__item:focus-visible {
     outline: none;
-    background: var(--color-accent-soft);
-    color: var(--color-text);
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    border-radius: var(--radius-pill);
     box-shadow: var(--shadow-focus);
 }

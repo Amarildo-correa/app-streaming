@@ -8,7 +8,7 @@
     --color-text-muted: #9a9fb0;
     --color-accent: #e8a33d;
     --color-accent-soft: rgba(232, 163, 61, 0.16);
-    --color-focus: #e8a33d;
+    --color-focus: var(--color-text);
 
     --space-1: 0.25rem;
     --space-2: 0.5rem;
@@ -41,7 +41,7 @@
     --radius-md: 0.5rem;
     --radius-round: 50%;
     --radius-pill: 999rem;
-    --shadow-focus: 0 0 0 0.2rem var(--color-focus), 0 0.5rem 1.5rem rgba(232, 163, 61, 0.35);
+    --shadow-focus: 0 0 0 0.3rem var(--color-focus), 0 0.5rem 1.5rem rgba(232, 163, 61, 0.35);
     --shadow-text: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.8);
     --gradient-card: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.85) 100%);
     --layer-content: 1;

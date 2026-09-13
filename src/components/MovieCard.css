@@ -49,5 +49,5 @@
   position: relative;
   z-index: var(--layer-content);
   transform: scale(1.12);
-  box-shadow: var(--shadow-focus);
+  box-shadow: 0 0 0 0.3rem var(--color-text);
 }

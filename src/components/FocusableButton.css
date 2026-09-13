@@ -28,6 +28,7 @@
   outline: none;
   background-color: var(--color-text);
   color: var(--color-bg);
+  border-radius: var(--radius-pill);
   transform: scale(1.08);
   box-shadow: var(--shadow-focus);
 }

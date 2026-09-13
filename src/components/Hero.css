@@ -9,7 +9,7 @@
     margin-inline: calc(var(--safe-area) * -1);
     margin-bottom: var(--space-6);
     overflow: hidden;
-    background: var(--color-surface);
+    background: var(--color-bg);
 }
 
 .hero--empty {
