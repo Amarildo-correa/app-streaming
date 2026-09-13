@@ -11,9 +11,16 @@
 
 .carousel-row__track {
   display: flex;
-  gap: var(--space-5);
-  overflow-x: hidden;
+  gap: calc(var(--space-5) + var(--space-2) + var(--space-1));
+  overflow-x: auto;
+  scrollbar-width: none;
   /* Cards horizontais precisam de menos folga acima para o scale e o anel. */
   padding: var(--space-5) var(--space-5) var(--space-7);
+  padding-left: calc(var(--space-5) + var(--space-1));
   margin: 0 calc(var(--space-5) * -1);
+  -ms-overflow-style: none;
+}
+
+.carousel-row__track::-webkit-scrollbar {
+  display: none;
 }

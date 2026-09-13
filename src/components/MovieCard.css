@@ -9,6 +9,7 @@
   border-radius: var(--radius-md);
   /* Reserva espaço para o crescimento e o anel ao acompanhar o foco. */
   scroll-margin-bottom: var(--space-7);
+  scroll-margin-inline-start: calc(var(--rail-width-expanded) + var(--space-5));
   /* O hero fica sticky sobre o topo da página: reserva espaço extra para o
      título da linha não ficar escondido atrás dele ao rolar via D-pad. */
   scroll-margin-top: calc(var(--hero-height) + var(--space-8));
@@ -47,7 +48,8 @@
 
 .movie-card.is-focused {
   position: relative;
-  z-index: var(--layer-content);
+  z-index: var(--layer-header);
+  box-shadow: 0 0 0 0.2rem var(--color-bg), 0 0 0 0.5rem var(--color-text);
   transform: scale(1.12);
-  box-shadow: 0 0 0 0.3rem var(--color-text), 0 0 1.5rem 0.5rem rgba(0, 0, 0, 0.95);
+
 }
