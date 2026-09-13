@@ -34,8 +34,16 @@ img {
 }
 
 .app-shell {
-  min-height: 100vh;
-  padding: 0 var(--safe-area) var(--safe-area);
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+.app-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 var(--safe-area) var(--safe-area);
 }
 
 html {

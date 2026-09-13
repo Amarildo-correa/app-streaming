@@ -1,0 +1,59 @@
+.nav-rail {
+    position: sticky;
+    top: 0;
+    z-index: var(--layer-header);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    width: var(--rail-width-collapsed);
+    height: 100vh;
+    flex: 0 0 auto;
+    padding-block: var(--space-6);
+    padding-inline: var(--space-3);
+    background: var(--color-bg);
+    overflow: hidden;
+}
+
+.nav-rail__brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 3rem;
+    margin-bottom: var(--space-6);
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-lg);
+    letter-spacing: var(--letter-spacing-display);
+    color: var(--color-accent);
+}
+
+.nav-rail__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    padding: var(--space-3);
+    border: none;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--transition-focus);
+}
+
+.nav-rail__item .icon {
+    flex: 0 0 auto;
+}
+
+.nav-rail__item.is-focused,
+.nav-rail__item:focus-visible {
+    outline: none;
+    background: var(--color-accent-soft);
+    color: var(--color-text);
+    box-shadow: var(--shadow-focus);
+}
