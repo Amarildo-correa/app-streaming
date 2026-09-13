@@ -13,6 +13,12 @@
     padding-inline: var(--space-3);
     background: var(--color-bg);
     overflow: hidden;
+    transition: width 0.2s ease;
+}
+
+.nav-rail:focus-within,
+.nav-rail:has(.nav-rail__item.is-focused) {
+    width: var(--rail-width-expanded);
 }
 
 .nav-rail__brand {
@@ -48,6 +54,16 @@
 
 .nav-rail__item .icon {
     flex: 0 0 auto;
+}
+
+.nav-rail__item span {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.nav-rail:focus-within .nav-rail__item span,
+.nav-rail:has(.nav-rail__item.is-focused) .nav-rail__item span {
+    opacity: 1;
 }
 
 .nav-rail__item.is-focused,
